@@ -18,7 +18,7 @@ const MenuContent: React.FC<{ pathname: string }> = ({ pathname }) => (
       <div className="flex gap-x-5 font-bold text-2xl items-center mb-16">
         <Icon color="#546FFF" IconComponent={menuItems[1].icon} /> TaskMng
       </div>
-      <div className="space-y-5 max-h-[calc(100vh-32rem)] overflow-y-auto">
+      <div className="space-y-5 max-h-[calc(100vh-300px)] overflow-y-auto">
         {menuItems.map((item, index) => {
           const isActiveItem = pathname === item.path
 

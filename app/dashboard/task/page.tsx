@@ -1,7 +1,7 @@
 import React from 'react'
 
 const TaskManagement = () => {
-  return <div>task</div>
+  return <div className="w-full">task</div>
 }
 
 export default TaskManagement

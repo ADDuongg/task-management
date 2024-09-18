@@ -10,7 +10,8 @@ const config: Config = {
     extend: {
       colors: {
           graySmall: {
-            100: '#F5F5F7'
+            100: '#F5F5F7',
+            200: '#FAFAFA'
           },
           blueSmall: {
             100: '#546FFF'

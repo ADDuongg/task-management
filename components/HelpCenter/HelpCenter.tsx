@@ -5,8 +5,8 @@ import { Button } from 'antd'
 
 const HelpCenter = () => {
   return (
-    <div className="w-full h-[280px] bg-blackSmall-100 rounded-xl text-center text-white relative z-10 flex flex-col justify-end items-center pb-10">
-      <div className="px-4 space-y-3 pb-10">
+    <div className="w-full h-[280px] bg-blackSmall-100 rounded-xl text-center text-white relative z-10 mx-auto pb-4">
+      <div className="px-4 space-y-3 pb-10 pt-16">
         <div className="font-semibold">Help Center</div>
         <div>
           Having Trouble in Learning. Please contact us for more questions.

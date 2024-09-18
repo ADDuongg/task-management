@@ -15,7 +15,9 @@ export default function RootLayout({
       <div className="flex-1">
         <Header />
         <SubHeader />
-        {children}
+        <div className="h-[calc(100vh-193px)] bg-graySmall-200 px-8">
+          {children}
+        </div>
       </div>
     </div>
   )
