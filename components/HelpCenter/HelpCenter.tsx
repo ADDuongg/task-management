@@ -3,7 +3,7 @@ import React from 'react'
 import { QuestionOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 
-const HelpCenter = () => {
+export const HelpCenter = () => {
   return (
     <div className="w-full h-[280px] bg-blackSmall-100 rounded-xl text-center text-white relative z-10 mx-auto pb-4">
       <div className="px-4 space-y-3 pb-10 pt-16">
@@ -23,5 +23,3 @@ const HelpCenter = () => {
     </div>
   )
 }
-
-export default HelpCenter

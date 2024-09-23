@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import Provider from '@/utils/Providers'
 
-import './globals.css'
+import '../styles/globals.css'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="overflow-hidden">
         <Provider>{children}</Provider>
       </body>
     </html>

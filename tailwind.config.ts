@@ -17,14 +17,19 @@ const config: Config = {
             100: '#546FFF'
           },
           purpleSmall: {
-            100: '#8E92BC'
+            100: '#8E92BC',
+            200: '#54577A'
           },
           blackSmall: {
             100: '#141522'
+          },
+          whiteSmall: {
+            100: '#FFFFFF'
           }
         },
         screens: {
-          xs: '0px', 
+          xs: '0px',
+          xl: '1400px' 
         },
     },
   },

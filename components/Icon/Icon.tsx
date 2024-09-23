@@ -6,12 +6,14 @@ interface IconProps {
   color?: string
 }
 
-const Icon: React.FC<IconProps> = ({ IconComponent, size = 33, color }) => {
+export const Icon: React.FC<IconProps> = ({
+  IconComponent,
+  size = 33,
+  color,
+}) => {
   return (
     <span style={{ fontSize: size, color }}>
       <IconComponent />
     </span>
   )
 }
-
-export default Icon

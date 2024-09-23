@@ -7,8 +7,8 @@ import { useAtom } from 'jotai'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import HelpCenter from '../HelpCenter/HelpCenter'
-import Icon from '../Icon/Icon'
+import { HelpCenter } from '../HelpCenter/HelpCenter'
+import { Icon } from '../Icon/Icon'
 import { menuItems } from '@/constants/sidebar'
 import { showSidebarState } from '@/state/commons'
 
@@ -43,13 +43,13 @@ const MenuContent: React.FC<{ pathname: string }> = ({ pathname }) => (
   </>
 )
 
-const Sidebar = () => {
+export const Sidebar = () => {
   const pathname = usePathname()
   const [showSidebar, setShowSidebar] = useAtom(showSidebarState)
 
   return (
     <>
-      <div className="xs:hidden lg:w-[350px] h-screen px-8 py-5 lg:flex flex-col justify-between gap-y-10 overflow-y-auto">
+      <div className="xs:hidden lg:w-[350px] h-screen px-8 py-5 lg:flex flex-col justify-between gap-y-10 overflow-y-auto ">
         <MenuContent pathname={pathname} />
       </div>
 
@@ -65,5 +65,3 @@ const Sidebar = () => {
     </>
   )
 }
-
-export default Sidebar

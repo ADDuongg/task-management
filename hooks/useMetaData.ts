@@ -1,13 +1,11 @@
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
-// Định nghĩa cấu trúc dữ liệu cho metadata
 interface MetaData {
   title: string
   description: string
 }
 
-// Định nghĩa dữ liệu tiêu đề và mô tả cho từng path
 const metaDataMap: Record<string, MetaData> = {
   '/': {
     title: 'Home Page',

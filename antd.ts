@@ -20,6 +20,9 @@ export const antdConfig: ConfigProviderProps = {
         // paddingInlineSM: 20,
         // controlHeight: 38,
         // controlHeightLG: 38
+      },
+      Calendar: {
+        miniContentHeight: 100
       }
     },
   },

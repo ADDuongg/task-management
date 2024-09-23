@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --color-graySmall-100: #F5F5F7;
+  --color-graySmall-200: #FAFAFA;
+  --color-blueSmall-100: #546FFF;
+  --color-purpleSmall-100: #8E92BC;
+  --color-purpleSmall-200: #54577A;
+  --color-blackSmall-100: #141522;
+  --color-blackSmall-100: #141522;
+  --color-whiteSmall-100: #FFFFFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.custom-progress .ant-progress-text {
+  color: var(--color-whiteSmall-100) !important; /* Sử dụng Tailwind để áp dụng màu chữ */
+}
+
