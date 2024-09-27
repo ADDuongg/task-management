@@ -49,7 +49,7 @@ export const Sidebar = () => {
 
   return (
     <>
-      <div className="xs:hidden lg:w-[350px] h-screen px-8 py-5 lg:flex flex-col justify-between gap-y-10 overflow-y-auto ">
+      <div className="xs:hidden lg:w-[300px] h-screen px-8 py-5 lg:flex flex-col justify-between gap-y-10 overflow-y-auto ">
         <MenuContent pathname={pathname} />
       </div>
 

@@ -2,13 +2,14 @@ import React from 'react'
 
 import { Typography as TypographyAntd } from 'antd'
 
-type LevelTypes = 5 | 1 | 2 | 3 | 4 | undefined
+type LevelTypes = 5 | 1 | 2 | 3 | 4
 
 interface TypographyProps {
   level?: LevelTypes
   color?: string
   fontWeight?: boolean
   text: string
+  className?: string
 }
 
 export const Typography: React.FC<TypographyProps> = ({
@@ -16,15 +17,16 @@ export const Typography: React.FC<TypographyProps> = ({
   color = 'blackSmall-100',
   fontWeight = false,
   text,
+  className,
 }) => {
   const { Title } = TypographyAntd
   return (
-    <div>
+    <div className={className}>
       <Title
         level={level}
         style={{
           color: `var(--color-${color})`,
-          fontWeight: fontWeight ? 'bold' : 'normal',
+          fontWeight: fontWeight ? '500' : 'normal',
           margin: 0,
         }}
       >

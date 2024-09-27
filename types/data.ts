@@ -11,7 +11,8 @@ export interface TaskInterface {
     reviewer: string,
     status: string,
     description: string,
-    workToDo?: string[]
+    workToDo?: string[],
+    taskOwner: string
 }
 
 export interface UsersInterface {

@@ -15,6 +15,7 @@ const mockDataTask: TaskInterface[] = [
         reviewer: 'son',
         status: 'doing',
         description: '...',
+        taskOwner: 'duong',
         workToDo: ['Understanding the tools in Figma','Understand the basics of making designs','Design a mobile application with figma']
     },
     {
@@ -28,6 +29,7 @@ const mockDataTask: TaskInterface[] = [
         reviewer: 'son',
         status: 'doing',
         description: '...',
+        taskOwner: 'duong',
         workToDo: ['Understanding the tools in Figma','Understand the basics of making designs','Design a mobile application with figma']
     },
     {
@@ -41,6 +43,7 @@ const mockDataTask: TaskInterface[] = [
         reviewer: 'son',
         status: 'doing',
         description: '...',
+        taskOwner: 'duong',
         workToDo: ['Understanding the tools in Figma','Understand the basics of making designs','Design a mobile application with figma']
     },
     {
@@ -54,6 +57,7 @@ const mockDataTask: TaskInterface[] = [
         reviewer: 'son',
         status: 'doing',
         description: '...',
+        taskOwner: 'duong',
         workToDo: ['Understanding the tools in Figma','Understand the basics of making designs','Design a mobile application with figma']
     },
     {
@@ -67,6 +71,7 @@ const mockDataTask: TaskInterface[] = [
         reviewer: 'son',
         status: 'doing',
         description: '...',
+        taskOwner: 'duong',
         workToDo: ['Understanding the tools in Figma','Understand the basics of making designs','Design a mobile application with figma']
     },
 ]

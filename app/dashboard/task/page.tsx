@@ -10,12 +10,16 @@ import { dataTask } from '@/state/task'
 const TaskManagement = () => {
   const tasks = useAtomValue(dataTask)
   return (
-    <div className="w-full h-[400px] py-20 space-y-20">
+    <>
       <div>
         <Typography text="Time Limit" fontWeight={true} />
         <SwipperTask data={tasks} />
       </div>
-    </div>
+      <div className="space-y-5">
+        <Typography text="New Tasks" fontWeight={true} />
+        <SwipperTask data={tasks} />
+      </div>
+    </>
   )
 }
 

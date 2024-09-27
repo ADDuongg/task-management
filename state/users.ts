@@ -38,7 +38,7 @@ const mockDataUsers: UsersInterface[] = [
         id: '1',
         avatar: user,
         name: 'Task 1',
-        description: '...',
+        description: "Hi, I'm Jessica Jane. I am a doctoral student at Harvard University majoring in Web . . .",
         date: '23/02/2002',
         position: 'Senior Web Developer',
         role: 'Leader',
@@ -48,12 +48,83 @@ const mockDataUsers: UsersInterface[] = [
         id: '1',
         avatar: user,
         name: 'Task 1',
-        description: '...',
+        description: "Hi, I'm Jessica Jane. I am a doctoral student at Harvard University majoring in Web . . .",
         date: '23/02/2002',
         position: 'Senior Web Developer',
         role: 'Leader',
         skills: 'ReactJS'
     },
+    {
+        id: '1',
+        avatar: user,
+        name: 'Task 1',
+        description: "Hi, I'm Jessica Jane. I am a doctoral student at Harvard University majoring in Web . . .",
+        date: '23/02/2002',
+        position: 'Senior Web Developer',
+        role: 'Leader',
+        skills: 'ReactJS'
+    },
+    {
+        id: '1',
+        avatar: user,
+        name: 'Task 1',
+        description: "Hi, I'm Jessica Jane. I am a doctoral student at Harvard University majoring in Web . . .",
+        date: '23/02/2002',
+        position: 'Senior Web Developer',
+        role: 'Leader',
+        skills: 'ReactJS'
+    },
+    {
+        id: '1',
+        avatar: user,
+        name: 'Task 1',
+        description: "Hi, I'm Jessica Jane. I am a doctoral student at Harvard University majoring in Web . . .",
+        date: '23/02/2002',
+        position: 'Senior Web Developer',
+        role: 'Leader',
+        skills: 'ReactJS'
+    },
+    {
+        id: '1',
+        avatar: user,
+        name: 'Task 1',
+        description: "Hi, I'm Jessica Jane. I am a doctoral student at Harvard University majoring in Web . . .",
+        date: '23/02/2002',
+        position: 'Senior Web Developer',
+        role: 'Leader',
+        skills: 'ReactJS'
+    },
+    {
+        id: '1',
+        avatar: user,
+        name: 'Task 1',
+        description: "Hi, I'm Jessica Jane. I am a doctoral student at Harvard University majoring in Web . . .",
+        date: '23/02/2002',
+        position: 'Senior Web Developer',
+        role: 'Leader',
+        skills: 'ReactJS'
+    },
+    {
+        id: '1',
+        avatar: user,
+        name: 'Task 1',
+        description: "Hi, I'm Jessica Jane. I am a doctoral student at Harvard University majoring in Web . . .",
+        date: '23/02/2002',
+        position: 'Senior Web Developer',
+        role: 'Leader',
+        skills: 'ReactJS'
+    },
+    {
+        id: '1',
+        avatar: user,
+        name: 'Task 1',
+        description: "Hi, I'm Jessica Jane. I am a doctoral student at Harvard University majoring in Web . . .",
+        date: '23/02/2002',
+        position: 'Senior Web Developer',
+        role: 'Leader',
+        skills: 'ReactJS'
+    },
+    
    
 ]
 

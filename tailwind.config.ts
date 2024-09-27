@@ -29,7 +29,8 @@ const config: Config = {
         },
         screens: {
           xs: '0px',
-          xl: '1400px' 
+          xl: '1400px',
+          xxl: '1800px' 
         },
     },
   },

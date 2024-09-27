@@ -82,7 +82,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
       {detailTask && (
         <div>
-          <hr className="my-6" />
+          <hr className="my-5" />
           <div className="flex justify-between">
             <Typography text="Detail Task" fontWeight={true} />
             <Typography

@@ -70,7 +70,7 @@ export default function App() {
   const users = useAtomValue(dataUsers)
 
   return (
-    <div className="flex xl:flex-row flex-col justify-between h-full overflow-y-auto xl:space-y-0 space-y-5">
+    <div className="flex xl:flex-row flex-col justify-between h-full xl:space-y-0 space-y-5">
       <div className="xl:w-[calc(100%-450px)] w-full space-y-5 xl:h-full h-auto">
         <Header bg="graySmall-200" />
         <div className="w-full sm:h-[200px] h-auto flex sm:flex-row flex-col">
@@ -93,7 +93,7 @@ export default function App() {
         </div>
       </div>
 
-      <div className="xl:w-[450px] w-full bg-graySmall-200 xl:px-5 space-y-5 xl:h-full h-auto">
+      <div className="xl:w-[450px] w-full bg-graySmall-200 xl:ps-5 space-y-5 xl:h-full h-auto">
         <Calendar fullscreen={false} />
 
         <div className="rounded-lg bg-white">
