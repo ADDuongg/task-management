@@ -16,12 +16,18 @@ export interface TaskInterface {
 }
 
 export interface UsersInterface {
-    id: string,
-    name: string,
-    role: string,
-    position: string,
-    description: string,
-    skills: string,
-    date: string,
-    avatar: StaticImageData
+    _id:string
+  email: string;
+  password: string;
+  account_role: number;
+  specialization?: string;
+  position?: string;
+  username: string;
+  description?: string;
+  phone_number?: string;
+  skills?: string[];
+  avatar?: StaticImageData;
+  date?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

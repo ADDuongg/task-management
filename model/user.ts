@@ -1,13 +1,21 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-interface IUser extends Document {
+export interface IUser extends Document {
   email: string;
   password: string;
   username: string;
   createdAt: Date;
+  account_role: number;
+  specialization?: string;
+  position?: string;
+  description?: string;
+  phone_number?: number;
+  skills?: string[];
+  avatar?: string;
+  updatedAt: Date;
 }
 
-const UserSchema: Schema = new Schema({
+const UserSchema: Schema<IUser> = new Schema({
   email: {
     type: String,
     required: true,
@@ -23,11 +31,9 @@ const UserSchema: Schema = new Schema({
   },
   specialization: {
     type: String,
-    required: true,
   },
   position: {
     type: String,
-    required: true,
   },
   username: {
     type: String,
@@ -35,11 +41,12 @@ const UserSchema: Schema = new Schema({
   },
   description: {
     type: String,
-    required: true,
+  },
+  phone_number: {
+    type: String,
   },
   skills: {
     type: [String],
-    required: true,
   },
   avatar: {
     type: String
@@ -54,8 +61,7 @@ const UserSchema: Schema = new Schema({
   },
 });
 
-
+// Xuất model User
 const UserModel: Model<IUser> = mongoose.models.UserModel || mongoose.model<IUser>('UserModel', UserSchema, 'User');
 
 export default UserModel;
-

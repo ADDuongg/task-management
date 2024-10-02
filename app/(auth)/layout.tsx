@@ -1,16 +1,17 @@
-import React from 'react';
+import React from 'react'
 
 const Layout = ({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) => {
   return (
-    <div>
-      this is auth layout
-      {children}
+    <div className="w-full h-screen verflow-y-auto flex justify-center items-center">
+      <div className="w-full h-full overflow-y-auto flex justify-center items-center">
+        {children}
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

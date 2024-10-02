@@ -12,10 +12,11 @@ import {
 import { Avatar, Badge, Dropdown } from 'antd'
 import { useSetAtom } from 'jotai'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { Icon } from '../Icon/Icon'
 import useMetaData from '@/hooks/useMetaData'
+import { logoutUser } from '@/services'
 import { showSidebarState } from '@/state/commons'
 
 interface HeaderProps {
@@ -24,8 +25,13 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ bg = 'white' }) => {
   const { description } = useMetaData()
+  const router = useRouter()
   const setShowSidebar = useSetAtom(showSidebarState)
   const pathname = usePathname()
+  const handleLogout = async () => {
+    logoutUser()
+    router.push('login')
+  }
   const items = [
     {
       key: '1',
@@ -58,14 +64,14 @@ export const Header: React.FC<HeaderProps> = ({ bg = 'white' }) => {
     {
       key: '3',
       label: (
-        <Link
+        <button
+          onClick={handleLogout}
           rel="noopener noreferrer"
-          href="login"
           className="flex gap-x-3 !text-red-400"
         >
           <Icon size={16} IconComponent={LogoutOutlined} />
           Logout
-        </Link>
+        </button>
       ),
     },
   ]

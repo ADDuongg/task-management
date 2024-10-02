@@ -10,18 +10,20 @@ interface TypographyProps {
   fontWeight?: boolean
   text: string
   className?: string
+  onClick?: () => void
 }
 
-export const Typography: React.FC<TypographyProps> = ({
+export const Typography: React.FC<React.PropsWithChildren<TypographyProps>> = ({
   level = 4,
   color = 'blackSmall-100',
   fontWeight = false,
   text,
   className,
+  onClick,
 }) => {
   const { Title } = TypographyAntd
   return (
-    <div className={className}>
+    <div className={className} onClick={onClick}>
       <Title
         level={level}
         style={{
