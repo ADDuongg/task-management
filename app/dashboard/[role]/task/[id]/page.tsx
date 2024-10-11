@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai'
 
 import { Icon, Typography } from '@/components'
 import { DetailTaskCard } from '@/components/DetailTaskCard'
-import { dataTask } from '@/state/task'
+import { dataTask } from '@/states/task'
 
 const DetailTaskPage = () => {
   const tasks = useAtomValue(dataTask)

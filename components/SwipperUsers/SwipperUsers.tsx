@@ -15,7 +15,7 @@ interface SwipperUsersProps {
 export const SwipperUsers: React.FC<SwipperUsersProps> = ({ data }) => {
   return (
     <SwipperWrapper>
-      {data.map((item, index) => (
+      {data?.map((item, index) => (
         <SwiperSlide key={index} className="h-full w-[80%] space-y-3">
           <UserCard user={item} detailUser={false} />
         </SwiperSlide>

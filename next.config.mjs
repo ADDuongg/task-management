@@ -4,10 +4,18 @@ const nextConfig = {
       return [
         {
           source: '/', 
-          destination: '/dashboard', 
+          destination: '/login', 
           permanent: true, 
         },
       ];
+    },
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: '**'
+        }
+      ]
     },
   };
   

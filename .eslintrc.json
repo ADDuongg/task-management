@@ -1,3 +1,6 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript", "prettier"]
+  "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": ["warn"] // Chỉ cảnh báo thay vì tự động sửa lỗi
+  }
 }

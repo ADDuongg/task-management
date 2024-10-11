@@ -2,12 +2,13 @@ import axios, { AxiosProgressEvent, AxiosRequestConfig, CancelToken } from "axio
 import Cookie from 'js-cookie';
 
 const requests = {
-    get: async <T>(url: string, header = false, cancelToken?: CancelToken): Promise<T> => {
+    get: async <T, B>(url: string, header = false, body?: B, cancelToken?: CancelToken): Promise<T> => {
         const token = Cookie.get('token');
         const config: AxiosRequestConfig = {
             method: 'get',
-            url: `${process.env.NEXT_PUBLIC_API_BASE_URL}${url}`,
+            url: `${process.env.NEXT_PUBLIC_SERVER_API_URL}${url}`,
             cancelToken,
+            data: body
         };
 
         if (header && token) {
@@ -20,7 +21,7 @@ const requests = {
         return response.data as T;
     },
 
-    post: async <T, B>(url: string, body: B, header = false, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void, signal?: AbortSignal, cancelToken?: CancelToken): Promise<T> => {
+    post: async <T, B>(url: string, body: B, header = false, uploadFile = false, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void, signal?: AbortSignal, cancelToken?: CancelToken): Promise<T> => {
         const token = Cookie.get('token');
         const config: AxiosRequestConfig = {
             method: 'post',
@@ -42,18 +43,17 @@ const requests = {
         if (signal) {
             config.signal = signal;
         }
-
         const response = await axios(config);
         return response.data as T; 
     },
 
-    delete: async <T>(url: string): Promise<T> => {
+    delete: async <T>(url: string, header: boolean): Promise<T> => {
         const token = Cookie.get('token');
         const config: AxiosRequestConfig = {
             method: 'delete',
             url: `${process.env.NEXT_PUBLIC_SERVER_API_URL}${url}`,
         };
-        if (token) {
+        if (header && token) {
             config.headers = {
                 Authorization: `Bearer ${token}`,
             };

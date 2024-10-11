@@ -4,13 +4,16 @@ import React, { useState } from 'react'
 
 import { FileDoneOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
+import { useSetAtom } from 'jotai'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import taslImage from '@/assets/images/taskBG.png'
+import taskImage from '@/assets/images/taskImage2.png'
 import { FlexContainer, Icon, Typography } from '@/components'
 import { loginUser } from '@/services'
+import { userRoleState } from '@/states/users'
+import { RoleEnum } from '@/types'
 
 interface loginType {
   email: string
@@ -19,24 +22,30 @@ interface loginType {
 
 const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const setRole = useSetAtom(userRoleState)
   const router = useRouter()
 
-  const onFinish = async (values: loginType) => {
+  const onFinish = (values: loginType) => {
     setIsSubmitting(true)
-    try {
-      await loginUser(values.email, values.password)
-      router.push('dashboard')
-      message.success('Login successful!')
-    } catch (error) {
-      if (error instanceof Error) {
-        message.error(error.message)
-      } else {
-        message.error('An unexpected error occurred.')
-      }
-    } finally {
-      setIsSubmitting(false)
-    }
+    loginUser(values.email, values.password)
+      .then((res) => {
+        const userRole = res.data.user.account_role
+        setRole(userRole)
+        router.push(`dashboard/${RoleEnum[userRole as RoleEnum]}`)
+        message.success('Login successful!')
+      })
+      .catch((error) => {
+        if (error instanceof Error) {
+          message.error(error.message)
+        } else {
+          message.error('An unexpected error occurred.')
+        }
+      })
+      .finally(() => {
+        setIsSubmitting(false)
+      })
   }
+  console.log(isSubmitting)
 
   return (
     <div className="w-[1200px] mx-auto max-w-[80%] h-auto border border-1 rounded-lg shadow-sm p-8 flex gap-x-5 lg:flex-row flex-col">
@@ -108,7 +117,13 @@ const Login = () => {
         </FlexContainer>
       </div>
       <div className="flex-1">
-        <Image className="w-full h-full" src={taslImage} alt="image" />
+        <Image
+          className="w-full h-full"
+          src={taskImage}
+          alt="image"
+          width={1200}
+          height={800} // Thay đổi chiều cao theo tỉ lệ của hình ảnh
+        />
       </div>
     </div>
   )

@@ -1,21 +1,9 @@
-import mongoose, { Document, Model, Schema } from 'mongoose';
+import { UsersInterface } from '@/types';
+import mongoose, { Model, Schema } from 'mongoose';
 
-export interface IUser extends Document {
-  email: string;
-  password: string;
-  username: string;
-  createdAt: Date;
-  account_role: number;
-  specialization?: string;
-  position?: string;
-  description?: string;
-  phone_number?: number;
-  skills?: string[];
-  avatar?: string;
-  updatedAt: Date;
-}
 
-const UserSchema: Schema<IUser> = new Schema({
+
+const UserSchema: Schema<UsersInterface> = new Schema({
   email: {
     type: String,
     required: true,
@@ -26,7 +14,7 @@ const UserSchema: Schema<IUser> = new Schema({
     required: true,
   },
   account_role: {
-    type: Number,
+    type: String,
     required: true,
   },
   specialization: {
@@ -62,6 +50,6 @@ const UserSchema: Schema<IUser> = new Schema({
 });
 
 // Xuất model User
-const UserModel: Model<IUser> = mongoose.models.UserModel || mongoose.model<IUser>('UserModel', UserSchema, 'User');
+const UserModel: Model<UsersInterface> = mongoose.models.UserModel || mongoose.model<UsersInterface>('UserModel', UserSchema, 'User');
 
 export default UserModel;

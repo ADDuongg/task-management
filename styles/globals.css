@@ -38,3 +38,17 @@ body {
   color: var(--color-whiteSmall-100) !important; /* Sử dụng Tailwind để áp dụng màu chữ */
 }
 
+::-webkit-scrollbar {
+  width: 6px;
+  height: 12px; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-graySmall-100); 
+  border-radius: 10px; 
+}
+
+
+::-webkit-scrollbar-track {
+  background: var(--color-graySmall-100); 
+}

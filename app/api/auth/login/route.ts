@@ -21,13 +21,13 @@ export const POST = async (req: Request) => {
         return NextResponse.json({ message: 'Invalid email or password' }, { status: 401 });
       }
   
-      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+      const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET);
       const token = await new SignJWT({ id: user._id, email: user.email })
           .setProtectedHeader({ alg: 'HS256' }) 
-          .setExpirationTime('1h') 
+          .setExpirationTime('72h') 
           .sign(secret); 
       
-      return NextResponse.json({ token });
+      return NextResponse.json({ token, user });
     } catch (error) {
       console.error('Login error:', error);
       return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });

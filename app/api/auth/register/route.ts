@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken'
 import { NextResponse } from 'next/server'
 
 import { dbConnect } from '@/lib/dbConnect'
-import UserModel, { IUser } from '@/model/user'
+import UserModel from '@/model/user'
+import { UsersInterface } from '@/types'
 
 export const POST = async (req: Request) => {
   await dbConnect()
@@ -27,14 +28,14 @@ export const POST = async (req: Request) => {
 
     const user = new UserModel({
       ...body,
-      account_role: 0,
+      account_role: 'user',
       password: hashedPassword,
-    } as IUser)
+    } as UsersInterface)
 
     await user.save()
     const token = jwt.sign(
       { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
+      process.env.NEXT_PUBLIC_JWT_SECRET,
       { expiresIn: '1h' },
     )
     return NextResponse.json({

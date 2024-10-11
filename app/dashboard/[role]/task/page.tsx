@@ -5,7 +5,7 @@ import React from 'react'
 import { useAtomValue } from 'jotai'
 
 import { SwipperTask, Typography } from '@/components'
-import { dataTask } from '@/state/task'
+import { dataTask } from '@/states/task'
 
 const TaskManagement = () => {
   const tasks = useAtomValue(dataTask)

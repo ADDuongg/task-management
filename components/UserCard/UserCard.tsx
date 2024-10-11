@@ -3,6 +3,7 @@ import React from 'react'
 import Image from 'next/image'
 
 import { Typography } from '../Typography'
+import avatar from '@/assets/images/user.png'
 import { UsersInterface } from '@/types'
 
 interface UserCardProps {
@@ -17,10 +18,22 @@ export const UserCard: React.FC<UserCardProps> = ({
   return (
     <div className="w-full p-5 bg-white rounded-lg">
       <div className="flex items-start gap-x-5">
-        <Image src={user.avatar} className="w-12 h-12" alt="" />
+        <Image
+          src={user.avatar || avatar}
+          width={0}
+          height={0}
+          sizes="100vw"
+          style={{
+            minWidth: '50px',
+            maxHeight: '50px',
+            height: '50px',
+            borderRadius: '100%',
+          }}
+          alt=""
+        />
         <div className="flex justify-between w-full">
           <div className="flex flex-col w-auto">
-            <Typography text={`${user.name}`} />
+            <Typography text={`${user.username}`} />
             <Typography
               level={5}
               text={`${user.position}`}

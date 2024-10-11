@@ -17,7 +17,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Icon } from '../Icon/Icon'
 import useMetaData from '@/hooks/useMetaData'
 import { logoutUser } from '@/services'
-import { showSidebarState } from '@/state/commons'
+import { showSidebarState } from '@/states/commons'
 
 interface HeaderProps {
   bg?: string
@@ -30,7 +30,7 @@ export const Header: React.FC<HeaderProps> = ({ bg = 'white' }) => {
   const pathname = usePathname()
   const handleLogout = async () => {
     logoutUser()
-    router.push('login')
+    router.push('/login')
   }
   const items = [
     {

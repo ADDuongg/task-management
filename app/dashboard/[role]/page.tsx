@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import React from 'react'
@@ -24,8 +25,12 @@ import {
   Typography,
 } from '@/components'
 import { TaskCard } from '@/components/TaskCard'
-import { dataTask } from '@/state/task'
-import { dataUsers } from '@/state/users'
+import { useListOfUserManagement } from '@/hooks/useUserManagement'
+import { dataTask } from '@/states/task'
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 ChartJS.register(
   LineElement,
@@ -65,9 +70,9 @@ const options = {
   },
 }
 
-export default function App() {
+const App = () => {
   const tasks = useAtomValue(dataTask)
-  const users = useAtomValue(dataUsers)
+  const { listOfUserManagement } = useListOfUserManagement({})
 
   return (
     <div className="flex xl:flex-row flex-col justify-between h-full xl:space-y-0 space-y-5">
@@ -77,14 +82,14 @@ export default function App() {
           <div className="sm:w-[200px] w-full">
             <RunningTask />
           </div>
-          <div className="flex flex-col sm:w-[calc(100%-200px)] w-full sm:ps-10 ">
+          <div className="flex flex-col sm:w-[calc(100%-200px)] w-full sm:ps-10">
             <Line data={data} options={options} />
           </div>
         </div>
 
         <div className="space-y-3">
           <Typography text="Mentors" fontWeight={true} />
-          <SwipperUsers data={users} />
+          <SwipperUsers data={listOfUserManagement} />
         </div>
 
         <div className="space-y-3">
@@ -97,9 +102,11 @@ export default function App() {
         <Calendar fullscreen={false} />
 
         <div className="rounded-lg bg-white">
-          <TaskCard task={tasks[0]} detailTask={true} />
+          {tasks.length > 0 && <TaskCard task={tasks[0]} detailTask={true} />}
         </div>
       </div>
     </div>
   )
 }
+
+export default App

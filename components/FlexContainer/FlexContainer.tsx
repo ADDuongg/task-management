@@ -35,7 +35,7 @@ export const FlexContainer: React.FC<FlexContainerProps> = ({
 }) => {
   return (
     <div
-      className={`${className} w-full`}
+      className={`${className}`}
       style={{
         display: 'flex',
         flexDirection: direction,
