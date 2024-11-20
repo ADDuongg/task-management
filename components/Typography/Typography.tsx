@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 
 import { Typography as TypographyAntd } from 'antd'
@@ -8,7 +10,7 @@ interface TypographyProps {
   level?: LevelTypes
   color?: string
   fontWeight?: boolean
-  text: string
+  text?: string
   className?: string
   onClick?: () => void
 }

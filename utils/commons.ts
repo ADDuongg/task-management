@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { message } from "antd";
 
 export const convertToDate = (dateString: string): Date => {
@@ -35,6 +36,13 @@ export const addAlert = ({type, content}:{type: 'success' | 'error' | 'info' | '
     }
 }
 
+export function convertMongoToPlainObject<T>(mongoObject: T): Omit<T, '_id' | '__v'> & { id?: string } {
+  const { _id, __v, ...plainEntry } = (mongoObject as any).toObject
+    ? (mongoObject as any).toObject() 
+    : mongoObject; 
+
+  return plainEntry
+}
 
 
 

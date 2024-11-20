@@ -29,7 +29,7 @@ const DetailTaskPage = () => {
 
       <div className="xl:w-[550px] w-full bg-whiteSmall-100 rounded-lg xl:h-full h-auto p-5 space-y-4">
         <Typography text="Assigned Assignments" />
-        <Typography text={tasks[0].name} level={3} fontWeight={true} />
+        <Typography text={tasks[0].subject} level={3} fontWeight={true} />
         <div className="flex gap-x-4">
           <div className="flex gap-x-3 items-center">
             <Typography text="Task owner:" level={3} fontWeight={true} />

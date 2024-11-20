@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { dbConnect } from '@/lib'
 import UserModel from '@/model/user'
-import { UsersInterface, filterInterface, sortInterface } from '@/types'
+import { RoleEnum, UsersInterface, filterInterface, sortInterface } from '@/types'
 import { deleteImageToCloudinary, getPublicIdFromUrl, uploadImageToCloudinary } from '@/utils/cloudinary'
 
 cloudinary.config({
@@ -15,11 +15,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
 export const POST = async (request: NextRequest) => {
   const url = new URL(request.url)
   const action = url.searchParams.get('action') || ''
@@ -33,7 +28,7 @@ export const POST = async (request: NextRequest) => {
       const {
         filter,
         sort,
-      }: { filter: filterInterface[]; sort: sortInterface[] } =
+      }: { filter: filterInterface<UsersInterface>[]; sort: sortInterface[] } =
         await request.json()
 
       const filterQuery: Record<string, any>[] = []
@@ -48,7 +43,7 @@ export const POST = async (request: NextRequest) => {
           filterQuery.push(condition)
         })
       }
-
+      
       const sortQuery: Record<string, any> = {}
       if (sort && sort.length > 0) {
         sort.forEach((item) => {
@@ -57,12 +52,17 @@ export const POST = async (request: NextRequest) => {
         })
       }
       const finalFilterQuery: Record<string, any> =
-        filterQuery.length > 0 ? { $or: filterQuery } : {}
+        filterQuery.length > 0 ? { $and: filterQuery } : {}
 
       if (search) {
-        finalFilterQuery['username'] = { $regex: search, $options: 'i' }
+        finalFilterQuery['$or'] = [
+          {'email': { $regex: search, $options: 'i' }},
+          {'username': { $regex: search, $options: 'i' }}
+        ]
       }
-
+      /* console.log(filterQuery); */
+      console.log(sortQuery);
+      console.log(finalFilterQuery);
       const totalRecords = await UserModel.countDocuments(finalFilterQuery)
       const users = await UserModel.find(finalFilterQuery)
         .sort(sortQuery)
@@ -138,11 +138,9 @@ export const POST = async (request: NextRequest) => {
       } as UsersInterface)
 
       await user.save()
-
+      const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET || 'default_secret';
       const token = jwt.sign(
-        { id: user._id, email: user.email },
-        process.env.NEXT_PUBLIC_JWT_SECRET,
-        { expiresIn: '1h' },
+        { id: user._id, email: user.email }, jwtSecret, { expiresIn: '1h' },
       )
       return NextResponse.json({
         message: 'User created successfully',
@@ -237,13 +235,15 @@ export const PUT = async (request: NextRequest) => {
     }
     user.email = email || user.email
     user.username = username || user.username
-    user.account_role = account_role || user.account_role
+    user.account_role = (account_role as RoleEnum) || user.account_role;
     user.specialization = specialization || user.specialization
     user.position = position || user.position
     user.description = description || user.description
     user.phone_number = phone_number || user.phone_number
     user.skills = skills || user.skills
     user.date = date || user.date
+    console.log(date);
+    
     if (password) {
       const salt = await bcrypt.genSalt(10)
       const hashedPassword = await bcrypt.hash(password, salt)

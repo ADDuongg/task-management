@@ -1,4 +1,4 @@
-declare module 'bcrypt';
+declare module 'bcryptjs';
 declare module 'jsonwebtoken';
 declare module 'js-cookie';
 declare module 'resend';

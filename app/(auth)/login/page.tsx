@@ -29,9 +29,9 @@ const Login = () => {
     setIsSubmitting(true)
     loginUser(values.email, values.password)
       .then((res) => {
-        const userRole = res.data.user.account_role
+        const userRole = res.user.account_role
         setRole(userRole)
-        router.push(`dashboard/${RoleEnum[userRole as RoleEnum]}`)
+        router.push(`dashboard/${[userRole as RoleEnum]}`)
         message.success('Login successful!')
       })
       .catch((error) => {
@@ -45,11 +45,11 @@ const Login = () => {
         setIsSubmitting(false)
       })
   }
-  console.log(isSubmitting)
 
   return (
     <div className="w-[1200px] mx-auto max-w-[80%] h-auto border border-1 rounded-lg shadow-sm p-8 flex gap-x-5 lg:flex-row flex-col">
       <div className="lg:w-[40%] w-full h-full flex flex-col items-start gap-5">
+        <span className="text-red-500 md:hidden">sss</span>
         <FlexContainer>
           <Icon
             IconComponent={FileDoneOutlined}

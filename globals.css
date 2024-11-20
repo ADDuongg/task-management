@@ -1,6 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind screens;
+
+/* @import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities"; */
 
 :root {
   --background: #ffffff;
@@ -10,7 +17,6 @@
   --color-blueSmall-100: #546FFF;
   --color-purpleSmall-100: #8E92BC;
   --color-purpleSmall-200: #54577A;
-  --color-blackSmall-100: #141522;
   --color-blackSmall-100: #141522;
   --color-whiteSmall-100: #FFFFFF;
 }

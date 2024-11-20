@@ -1,27 +1,30 @@
-import { StaticImageData } from "next/image";
-import { RoleEnum, SortEnum } from "./commons";
-import { RcFile } from "antd/lib/upload";
+import mongoose from "mongoose";
+import { ProjectStatus, RoleEnum, SortEnum, TaskStatus } from "./commons";
 
 export interface TaskInterface {
-    id: string;
-    img: StaticImageData;
-    name: string;
-    done: string;
-    startDate: string;
-    dueDate: string;
-    assignTo: string;
-    reviewer: string;
-    status: string;
-    description: string;
+    _id: string;
+    files?: string[];
+    subject?: string;
+    done?: string;
+    startDate?: string;
+    dueDate?: string;
+    assignTo?: mongoose.Types.ObjectId;
+    status?: TaskStatus;
+    descriptions?: string;
     workToDo?: string[];
-    taskOwner: string;
+    taskOwner?: mongoose.Types.ObjectId;
+    estimateTime?: string
+    /* userId?: mongoose.Types.ObjectId[]; */
+    projectId?: mongoose.Types.ObjectId;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface UsersInterface {
     _id: string;
     email: string;
     password: string;
-    account_role?: string;
+    account_role?: RoleEnum;
     specialization?: string;
     position?: string;
     username: string;
@@ -34,8 +37,8 @@ export interface UsersInterface {
     updatedAt?: Date;
     confirm_password?: string;
 }
-export interface filterInterface {
-  field: keyof UsersInterface,
+export interface filterInterface<T> {
+  field: keyof T,
   value: string[]
 };
 
@@ -60,3 +63,41 @@ export interface UserFormRequest {
     confirm_password?: string;
 }
 
+export interface TaskFormRequest {
+  assignTo?: string;      
+  dueDate: string;        
+  done: number;      
+  startDate: string;      
+  status: TaskStatus;        
+  subject?: string;      
+  taskOwner?: string;    
+  descriptions?: string;
+  estimateTime?: number;
+  userId?: string[] 
+  workToDo?: string[];
+  files?: File[] | string[]
+}
+
+export interface ProjectInterface {
+  _id: string;
+  projectName: string;
+  status?: ProjectStatus;
+  description?: string;
+  startDate?: string;
+  dueDate?: string;
+  taskId?: TaskInterface[];
+  userId: UsersInterface[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+
+export interface ProjectFormRequest {
+  projectName: string;
+  status: ProjectStatus;
+  description?: string;
+  startDate?: string;
+  dueDate?: string;
+  taskId?: string[] | TaskInterface[] | { label: string; value: string; }[];
+  userId: string[] | UsersInterface[] | { label: string; value: string; }[];
+}

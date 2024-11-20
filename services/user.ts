@@ -13,7 +13,7 @@ export const userServices = {
     }: {
         page?: number;
         limit?: number; 
-        filter?: filterInterface[];
+        filter?: filterInterface<UsersInterface>[];
         sort?: sortInterface[];
         search?: string;
     }) => {
@@ -40,7 +40,6 @@ export const userServices = {
         return res;
     },
     
-
     getCurrentUser: async () => {
         const res = await requests.get<UsersInterface, any>('/user/current', true);
         return res;

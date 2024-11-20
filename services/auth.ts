@@ -4,16 +4,16 @@ import axios from 'axios';
 import { registerInterface, UsersInterface } from '@/types';
 import Cookie from 'js-cookie';
 import requests from '@/lib/api';
-import { ApiResponse, AuthResponse } from '@/types/api';
+import { ApiResponse, AuthResponse, LoginResponse } from '@/types/api';
 
-export const loginUser = async (email: string, password: string): Promise<any> => {
+export const loginUser = async (email: string, password: string): Promise<LoginResponse> => {
   try {
-    const response = await axios.post<{ token: string, user: UsersInterface }>(
-      `${process.env.NEXT_PUBLIC_SERVER_API_URL}/auth/login`,
+    const response = await requests.post<LoginResponse, any>(
+      `/auth/login`,
       { email, password }
     );
 
-    const token = response.data.token;
+    const token = response.token;
     Cookie.set('token', token, {
       expires: 7,
       secure: true,

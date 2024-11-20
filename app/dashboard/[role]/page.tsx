@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import React from 'react'
@@ -27,10 +26,6 @@ import {
 import { TaskCard } from '@/components/TaskCard'
 import { useListOfUserManagement } from '@/hooks/useUserManagement'
 import { dataTask } from '@/states/task'
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 ChartJS.register(
   LineElement,

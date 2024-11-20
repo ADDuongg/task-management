@@ -1,6 +1,6 @@
 export enum RoleEnum {
-    admin = 'admin',
-    user = 'user'
+    ADMIN = 'admin',
+    USER = 'user'
 }
 
 export enum SortEnum {
@@ -23,4 +23,15 @@ export enum ActionData {
     CREATE= 'create',
     UPDATE= 'update',
     VIEW= 'view'
+}
+
+export enum TaskStatus {
+    DOING= 'doing',
+    REVIEW= 'reivew',
+    OPENTODO= 'open/todo',
+}
+
+export enum ProjectStatus {
+    OPEN= 'open',
+    CLOSE= 'close',
 }

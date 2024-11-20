@@ -12,7 +12,6 @@ import { Icon } from '../Icon/Icon'
 import { menuItems } from '@/constants/sidebar'
 import { showSidebarState } from '@/states/commons'
 import { userRoleState } from '@/states/users'
-import { RoleEnum } from '@/types'
 
 const MenuContent: React.FC<{ pathname: string; role?: string }> = ({
   pathname,
@@ -25,7 +24,7 @@ const MenuContent: React.FC<{ pathname: string; role?: string }> = ({
       </div>
       <div className="space-y-5 max-h-[calc(100vh-300px)] overflow-y-auto">
         {menuItems.map((item, index) => {
-          const isActiveItem = pathname === item.key
+          const isActiveItem = pathname.includes(`${role}/${item.key}`)
           const path = `/dashboard/${role}`
 
           const href = item.key === 'dashboard' ? path : `${path}/${item.key}`
@@ -34,9 +33,10 @@ const MenuContent: React.FC<{ pathname: string; role?: string }> = ({
             <Link
               href={href}
               key={index}
+              prefetch={true}
               className={`flex p-4 gap-x-4 items-center text-xl cursor-pointer rounded-xl ${
                 isActiveItem
-                  ? 'bg-graySmall-100 font-bold text-black'
+                  ? 'bg-graySmall-100 font-bold'
                   : 'text-purpleSmall-100'
               }`}
             >

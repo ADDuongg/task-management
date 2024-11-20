@@ -8,7 +8,7 @@ import {
 
 export const menuItems = [
   { label: 'Home', icon: HomeOutlined, key: `dashboard` },
-  { label: 'Task', icon: BookOutlined, key: `task` },
+  { label: 'Project', icon: BookOutlined, key: `project` },
   { label: 'Members', icon: UsergroupAddOutlined, key: `members` },
   { label: 'Message', icon: MessageOutlined, key: `message` },
   { label: 'Setting', icon: SettingOutlined, key: `setting` },

@@ -17,10 +17,10 @@ export const DetailTaskCard: React.FC<TaskCardProps> = ({ task }) => {
   return (
     <div className="space-y-2 rounded-lg  overflow-hidden">
       <div className="h-96 !flex flex-col items-start">
-        <Image src={task.img} className="w-full h-full" alt="" />
+        <Image src={task.files[0]} className="w-full h-full" alt="" />
       </div>
       <div className="flex justify-between items-center w-full">
-        <Typography text={task.name} level={3} fontWeight={true} />
+        <Typography text={task.subject} level={3} fontWeight={true} />
         <div className="flex items-center gap-x-3">
           <Typography text="Status:" fontWeight={true} level={3} />
           <Typography text={task.status} />

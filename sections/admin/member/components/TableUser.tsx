@@ -42,7 +42,7 @@ const { Option } = Select
 const TableUser = () => {
   const [page, setPage] = useState<number>(1)
   const [sort, setSort] = useState<sortInterface[]>([])
-  const [filter, setFilter] = useState<filterInterface[]>([])
+  const [filter, setFilter] = useState<filterInterface<UsersInterface>[]>([])
   const [limit, setLimit] = useState<number>(5)
   const [search, setSearch] = useState<string>('')
   const [openModalCreateUser, setOpenModalCreateUser] = useState<boolean>(false)
@@ -138,11 +138,12 @@ const TableUser = () => {
     [setLimit],
   )
 
-  const handleSearchChange = useCallback(() => {
-    ;(e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearch(e.target.value)
-    }
-  }, [setSearch])
+    },
+    [setSearch],
+  )
 
   const clearSort = useCallback(() => {
     setSort([])
@@ -228,7 +229,7 @@ const TableUser = () => {
                           onChange={(e) =>
                             handleFilterChange(
                               'position',
-                              'Project manager',
+                              'PM',
                               e.target.checked,
                             )
                           }

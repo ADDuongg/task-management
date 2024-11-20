@@ -14,7 +14,7 @@ const MembersManagement = () => {
 
   return (
     <>
-      {role === RoleEnum.admin ? (
+      {role === RoleEnum.ADMIN ? (
         <AdminMembersManagement />
       ) : (
         <UserMembersManagement />

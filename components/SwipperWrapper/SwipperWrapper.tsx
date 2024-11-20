@@ -29,9 +29,7 @@ export const SwipperWrapper: React.FC<SwipperProps> = ({
           setSlidesPerView(1.5)
         } else if (width < 1200) {
           setSlidesPerView(2.5)
-        } /* else if (width < 1324) {
-          setSlidesPerView(2.5)
-        } */ else if (width < 1500) {
+        } else if (width < 1500) {
           setSlidesPerView(3.5)
         } else {
           setSlidesPerView(4.5)

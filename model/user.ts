@@ -1,8 +1,6 @@
 import { UsersInterface } from '@/types';
 import mongoose, { Model, Schema } from 'mongoose';
 
-
-
 const UserSchema: Schema<UsersInterface> = new Schema({
   email: {
     type: String,
@@ -36,6 +34,9 @@ const UserSchema: Schema<UsersInterface> = new Schema({
   skills: {
     type: [String],
   },
+  date: {
+    type: Date
+  },
   avatar: {
     type: String
   },
@@ -47,9 +48,11 @@ const UserSchema: Schema<UsersInterface> = new Schema({
     type: Date,
     default: Date.now,
   },
+  
+},{
+  timestamps: true, 
 });
 
-// Xuất model User
-const UserModel: Model<UsersInterface> = mongoose.models.UserModel || mongoose.model<UsersInterface>('UserModel', UserSchema, 'User');
+const UserModel: Model<UsersInterface> = mongoose.models.User || mongoose.model<UsersInterface>('User', UserSchema, 'User');
 
 export default UserModel;

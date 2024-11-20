@@ -22,7 +22,7 @@ export const useListOfUserManagement = ({
 }: {
   page?: number
   limit?: number
-  filter?: filterInterface[]
+  filter?: filterInterface<UsersInterface>[]
   sort?: sortInterface[]
   search?: string
   isPagination?: boolean
