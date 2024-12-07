@@ -1,12 +1,14 @@
+'use server'
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server'
 import { v2 as cloudinary } from 'cloudinary'
 import { dbConnect } from '@/lib'
-import TaskModel from '@/model/task'
-import { TaskInterface, filterInterface, sortInterface } from '@/types'
-import { uploadImageToCloudinary } from '@/utils/cloudinary'
+import { TaskInterface, TaskStatus, filterInterface, sortInterface } from '@/types'
+import { deleteImageToCloudinary, uploadImageToCloudinary } from '@/utils/cloudinary'
+import { jwtVerify } from 'jose'
+import { TaskModel } from '@/model'
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -27,7 +29,7 @@ export const POST = async (request: NextRequest) => {
       const {
         filter,
         sort,
-      }: { filter: filterInterface<TaskInterface>[]; sort: sortInterface[] } =
+      }: { filter: filterInterface<TaskInterface>[]; sort: sortInterface<TaskInterface>[] } =
         await request.json()
 
       const filterQuery: Record<string, any>[] = []
@@ -56,7 +58,6 @@ export const POST = async (request: NextRequest) => {
       if (search) {
         finalFilterQuery['subject'] = { $regex: search, $options: 'i' }
       }
-      console.log(finalFilterQuery);
       
       const totalRecords = await TaskModel.countDocuments(finalFilterQuery)
       const tasks = await TaskModel.find(finalFilterQuery)
@@ -107,7 +108,6 @@ export const POST = async (request: NextRequest) => {
       const taskOwner = formData.get('taskOwner') as string
       const estimateTime = formData.get('estimateTime') as string
       // const userId = formData.getAll('userId') as string[]
-      // console.log(userId)
 
       const existingUser = await TaskModel.findOne({
         $or: [{ subject }],
@@ -150,3 +150,45 @@ export const POST = async (request: NextRequest) => {
     }
   }
 }
+
+export const GET = async (request: NextRequest) => {
+  await dbConnect()
+  const url = new URL(request.url)
+  const id = url.searchParams.get('id')
+  try {
+    const authorization = request.headers.get('Authorization');
+    if (!authorization) {
+        return NextResponse.json({ message: 'Authorization header missing' }, { status: 401 });
+    }
+    
+    const token = authorization.split(' ')[1]; 
+    
+    if (!token) {
+        return NextResponse.json({ message: 'Token missing' }, { status: 401 });
+    }
+
+    const secret = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SECRET);
+    const { payload } = await jwtVerify(token, secret);
+    
+    const userId = payload.id;
+    if (!userId) {
+        return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
+    }
+
+    const task = await TaskModel.findById(id).populate('assignTo')
+    .populate('taskOwner')
+  if (!task) {
+    return NextResponse.json({ message: 'Task not found' }, { status: 404 })
+  }
+
+    return NextResponse.json(
+      { task },
+      { status: 200 },
+    )
+} catch (error) {
+    console.error('Error verifying token:', error);
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+}
+  
+}
+

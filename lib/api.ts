@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios, { AxiosProgressEvent, AxiosRequestConfig, CancelToken } from "axios";
-import Cookie from 'js-cookie';
+import Cookie from 'js-cookie'
 
 const requests = {
     get: async <T, B>(url: string, header = false, body?: B, cancelToken?: CancelToken): Promise<T> => {
         const token = Cookie.get('token');
+        
         const config: AxiosRequestConfig = {
             method: 'get',
             url: `${process.env.NEXT_PUBLIC_SERVER_API_URL}${url}`,

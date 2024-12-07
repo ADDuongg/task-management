@@ -13,15 +13,16 @@ interface TypographyProps {
   text?: string
   className?: string
   onClick?: () => void
+  classNameText?: string
 }
 
 export const Typography: React.FC<React.PropsWithChildren<TypographyProps>> = ({
   level = 4,
-  color = 'blackSmall-100',
   fontWeight = false,
   text,
   className,
   onClick,
+  classNameText,
 }) => {
   const { Title } = TypographyAntd
   return (
@@ -29,10 +30,10 @@ export const Typography: React.FC<React.PropsWithChildren<TypographyProps>> = ({
       <Title
         level={level}
         style={{
-          color: `var(--color-${color})`,
           fontWeight: fontWeight ? '500' : 'normal',
           margin: 0,
         }}
+        className={classNameText}
       >
         {text}
       </Title>

@@ -1,38 +1,51 @@
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { useAtom, useAtomValue } from 'jotai'
+import { userRoleState } from '@/states/users'
 
 interface MetaData {
   title: string
   description: string
 }
 
-const metaDataMap: Record<string, MetaData> = {
-  '/': {
-    title: 'Home Page',
-    description: 'Welcome to the home page',
-  },
-  '/dashboard/task': {
-    title: 'Task',
-    description: 'Explore Task',
-  },
-  '/dashboard/members': {
-    title: 'Members',
-    description: 'Explore Members',
-  },
-  '/dashboard/message': {
-    title: 'Message',
-    description: 'Message',
-  },
-  '/dashboard/setting': {
-    title: 'Setting',
-    description: 'Setting',
-  },
-}
 
 const useMetaData = () => {
   const pathname = usePathname()
-
+  const role = useAtomValue(userRoleState)
+  console.log('pathname', pathname)
+  
+  const metaDataMap: Record<string, MetaData> = {
+    '/': {
+      title: 'Home Page',
+      description: 'Welcome to the home page',
+    },
+    [`/dashboard/${role}/task`]: {
+      title: 'Task',
+      description: 'Explore Task',
+    },
+    [`/dashboard/${role}/members`]: {
+      title: 'Members',
+      description: 'Explore Members',
+    },
+    [`/dashboard/${role}/project`]: {
+      title: 'Project',
+      description: 'Explore Project',
+    },
+    [`/dashboard/${role}/profile`]: {
+      title: 'Profile',
+      description: 'Explore Profile',
+    },
+    [`/dashboard/${role}/message`]: {
+      title: 'Message',
+      description: 'Message',
+    },
+    [`/dashboard/${role}/setting`]: {
+      title: 'Setting',
+      description: 'Setting',
+    },
+  }
   useEffect(() => {
+    
     const metaData = metaDataMap[pathname] || metaDataMap['/'] 
 
     document.title = metaData.title

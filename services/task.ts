@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import requests from "@/lib/api";
-import { filterInterface, sortInterface, TaskInterface, UsersInterface } from "@/types";
-import { deleteApiResponse, TasksResponse } from "@/types/api";
+import { filterInterface, sortInterface, TaskInterface } from "@/types";
+import { TasksResponse } from "@/types/api";
 
 export const taskServices = {
     getListTasks: async ({
@@ -14,7 +14,7 @@ export const taskServices = {
         page?: number;
         limit?: number; 
         filter?: filterInterface<TaskInterface>[];
-        sort?: sortInterface[];
+        sort?: sortInterface<TaskInterface>[];
         search?: string;
     }) => {
         const queryParams = new URLSearchParams();
@@ -41,18 +41,8 @@ export const taskServices = {
     },
     
 
-    getCurrentUser: async () => {
-        const res = await requests.get<UsersInterface, any>('/user/current', true);
-        return res;
-    },
-
-    getListUsersRole: async () => {
-        const res = await requests.get<any, any>('/user/account_role', true);
-        return res;
-    },
-
-    deleteUser: async (id: number) => {
-        const res = await requests.delete<deleteApiResponse>(`/user?id=${id}`, true);
+    getTaskById: async (id: string) => {
+        const res = await requests.get<TaskInterface, any>(`/task?id=${id}`, true);
         return res;
     },
 
@@ -61,10 +51,6 @@ export const taskServices = {
         return res;
     },
 
-    updateUser: async (data: any, id: string) => {
-        const res = await requests.put<any, any>(`/user?id=${id}`, data, true);
-        return res;
-    },
 
 
 };

@@ -1,4 +1,4 @@
-import { ProjectInterface, TaskInterface, UsersInterface } from "./data"
+import { MessageInterface, ProjectInterface, RoomInterface, TaskInterface, UsersInterface } from "./data"
 
 export interface ApiResponse{
     status: number,
@@ -27,7 +27,7 @@ export interface deleteApiResponse {
 }
 
 export interface LoginResponse {
-    token: string,
+    token: string
     user: UsersInterface
 }
 
@@ -39,4 +39,12 @@ export interface TasksResponse {
 export interface ProjectsResponse {
     projects: ProjectInterface[]
     pagination?: Pagination
+}
+
+export interface RoomsResponse {
+    rooms: RoomInterface[]
+}
+
+export interface MessageResponse {
+    messageResponse: MessageInterface[]
 }

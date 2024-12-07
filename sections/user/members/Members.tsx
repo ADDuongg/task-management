@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 
 import { Pagination } from 'antd'
@@ -9,7 +11,6 @@ import { useListOfUserManagement } from '@/hooks/useUserManagement'
 export const UserMembersManagement = () => {
   const [page, setPage] = useState<number>(1)
   const { listOfUserManagement: userNoPagination } = useListOfUserManagement({
-    page,
     isPagination: false,
   })
   const { listOfUserManagement, pagination } = useListOfUserManagement({
@@ -22,7 +23,7 @@ export const UserMembersManagement = () => {
     <>
       <div className="space-y-5">
         <Typography text="Recent Mentors" fontWeight={true} />
-        <SwipperUsers data={userNoPagination} />
+        <SwipperUsers />
       </div>
 
       <div className="space-y-5">

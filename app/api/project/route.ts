@@ -5,8 +5,8 @@ import { v2 as cloudinary } from 'cloudinary'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { dbConnect } from '@/lib'
-import ProjectModel from '@/model/project'
 import { ProjectInterface, filterInterface, sortInterface } from '@/types'
+import { ProjectModel } from '@/model'
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -17,7 +17,6 @@ cloudinary.config({
 export const POST = async (request: NextRequest) => {
   const url = new URL(request.url)
   const action = url.searchParams.get('action') || ''
-  console.log(action)
 
   if (action !== 'create') {
     try {
@@ -31,7 +30,7 @@ export const POST = async (request: NextRequest) => {
         sort,
       }: {
         filter: filterInterface<ProjectInterface>[]
-        sort: sortInterface[]
+        sort: sortInterface<ProjectInterface>[]
       } = await request.json()
 
       const filterQuery: Record<string, any>[] = []
@@ -60,7 +59,6 @@ export const POST = async (request: NextRequest) => {
       if (search) {
         finalFilterQuery['projectName'] = { $regex: search, $options: 'i' }
       }
-      console.log(finalFilterQuery);
       const totalRecords = await ProjectModel.countDocuments(finalFilterQuery)
       const projects = await ProjectModel.find(finalFilterQuery)
         .populate('userId')
@@ -96,7 +94,6 @@ export const POST = async (request: NextRequest) => {
     await dbConnect()
     try {
       const { projectName, userId, taskId } = await request.json()
-        console.log(userId);
         
       const existingProject = await ProjectModel.findOne({
         $or: [{ projectName }],

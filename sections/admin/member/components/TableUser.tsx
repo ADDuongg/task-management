@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 
 import {
+  DashOutlined,
   DeleteOutlined,
   EditOutlined,
   FilterOutlined,
@@ -25,148 +26,96 @@ import Image from 'next/image'
 import ModalCreateUser from './ModalCreateUser'
 import ModalUpdateUser from './ModalUpdateUser'
 import { FlexContainer, Icon } from '@/components'
-import { useDebounce } from '@/hooks/useDebounce'
+import { useHandleDataTable } from '@/hooks/useHandleDataTable'
 import {
   useDeleteUser,
   useListOfUserManagement,
   useUsersRole,
 } from '@/hooks/useUserManagement'
-import {
-  SortEnum,
-  UsersInterface,
-  filterInterface,
-  sortInterface,
-} from '@/types'
+import { SortEnum, UsersInterface } from '@/types'
 
 const { Option } = Select
 const TableUser = () => {
-  const [page, setPage] = useState<number>(1)
-  const [sort, setSort] = useState<sortInterface[]>([])
-  const [filter, setFilter] = useState<filterInterface<UsersInterface>[]>([])
-  const [limit, setLimit] = useState<number>(5)
-  const [search, setSearch] = useState<string>('')
   const [openModalCreateUser, setOpenModalCreateUser] = useState<boolean>(false)
   const [openModalUpdateUser, setOpenModalUpdateUser] = useState<boolean>(false)
   const [user, setUser] = useState<UsersInterface>()
-
-  const debouncedSearchTerm = useDebounce(search, 300)
+  const {
+    sort,
+    filter,
+    page,
+    limit,
+    search,
+    setPage,
+    clearSort,
+    clearFilter,
+    clearAll,
+    handleSortChange,
+    handleFilterChange,
+    getSortOrder,
+    handleLimitChange,
+    handleSearchChange,
+  } = useHandleDataTable<UsersInterface>()
   const { listOfUserManagement, pagination, isLoading } =
     useListOfUserManagement({
       page,
       limit,
       filter,
       sort,
-      search: debouncedSearchTerm,
+      search,
     })
   const { listOfUserRole } = useUsersRole()
   const { deleteUser, isPending } = useDeleteUser()
   const { totalPages, currentPage, pageSize } = pagination || {}
 
-  const handleSortChange = useCallback(
-    (field: string) => {
-      setSort((prevFields) => {
-        const existingField = prevFields?.find((f) => f.field === field)
-        if (existingField) {
-          return prevFields?.map((f) =>
-            f.field === field
-              ? {
-                  ...f,
-                  order:
-                    f.order === SortEnum.ASC ? SortEnum.DESC : SortEnum.ASC,
-                }
-              : f,
-          )
-        } else {
-          return [...prevFields, { field, order: SortEnum.ASC }]
-        }
-      })
-    },
-    [setSort],
-  )
-
-  const handleFilterChange = useCallback(
-    (column: keyof UsersInterface, value: string, checked: boolean) => {
-      setFilter((prevFilter) => {
-        const existingFilter = prevFilter.find(
-          (filterItem) => filterItem.field === column,
-        )
-
-        if (existingFilter) {
-          if (checked) {
-            if (!existingFilter.value.includes(value)) {
-              return prevFilter.map((filterItem) =>
-                filterItem.field === column
-                  ? { ...filterItem, value: [...filterItem.value, value] }
-                  : filterItem,
-              )
-            }
-          } else {
-            return prevFilter
-              .map((filterItem) =>
-                filterItem.field === column
-                  ? {
-                      ...filterItem,
-                      value: filterItem.value.filter((v) => v !== value),
-                    }
-                  : filterItem,
-              )
-              .filter((filterItem) => filterItem.value.length > 0)
-          }
-        } else {
-          return checked
-            ? [...prevFilter, { field: column, value: [value] }]
-            : prevFilter
-        }
-
-        return prevFilter
-      })
-    },
-    [setFilter],
-  )
-
-  const getSortOrder = useCallback(
-    (field: string) => {
-      const sortField = sort?.find((f) => f.field === field)
-      return sortField ? sortField.order : undefined
-    },
-    [sort],
-  )
-  const handleLimitChange = useCallback(
-    (value: number) => {
-      setLimit(value)
-    },
-    [setLimit],
-  )
-
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearch(e.target.value)
-    },
-    [setSearch],
-  )
-
-  const clearSort = useCallback(() => {
-    setSort([])
-  }, [setSort])
-
-  const clearFilter = useCallback(() => {
-    setFilter([])
-  }, [setFilter])
-
-  const clearAll = useCallback(() => {
-    setSort([])
-    setFilter([])
-  }, [setSort, setFilter])
-  console.log(listOfUserRole)
-
   const handleOpenModaCreatelUser = () => {
     setOpenModalCreateUser(true)
   }
-  const handleOpenModaUpdatelUser = (user: UsersInterface) => {
+  const handleOpenModalUpdateUser = (user: UsersInterface) => {
     setUser(user)
     setOpenModalUpdateUser(true)
   }
-
+  const itemsEditTask = (record: UsersInterface) => {
+    return [
+      {
+        key: '3',
+        label: (
+          <Tooltip title={'Update'}>
+            <div onClick={() => handleOpenModalUpdateUser(record)}>
+              <EditOutlined
+                key={`edit-${record._id}`}
+                className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl mr-1"
+              />
+              Edit User
+            </div>
+          </Tooltip>
+        ),
+      },
+      {
+        key: '4',
+        label: (
+          <Popconfirm
+            key={`delete-${record._id}`}
+            title={'Confirm'}
+            placement="left"
+            description={'Are you sure you want to delete this user?'}
+            onConfirm={() => deleteUser(record._id)}
+            cancelText={'Cancel'}
+            okText={'OK'}
+            cancelButtonProps={{
+              type: 'primary',
+              danger: true,
+              loading: isPending,
+            }}
+          >
+            <Tooltip title={'Delete'}>
+              <DeleteOutlined className="cursor-pointer hover:opacity-70 text-red-500 text-xl mr-1" />
+              Delete User
+            </Tooltip>
+          </Popconfirm>
+        ),
+      },
+    ]
+  }
   const columns: TableProps<UsersInterface>['columns'] = [
     {
       title: 'ID',
@@ -330,31 +279,20 @@ const TableUser = () => {
       width: 100,
       render: (_id, record) => (
         <Space key={`actions-${_id}`} size="middle">
-          <Tooltip title={'Update'}>
-            <EditOutlined
-              key={`edit-${_id}`}
-              className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl"
-              onClick={() => handleOpenModaUpdatelUser(record)}
-            />
-          </Tooltip>
-          <Popconfirm
-            key={`delete-${_id}`}
-            title={'Confirm'}
-            placement="left"
-            description={'Are you sure you want to delete this user?'}
-            onConfirm={() => deleteUser(_id)}
-            cancelText={'Cancel'}
-            okText={'OK'}
-            cancelButtonProps={{
-              type: 'primary',
-              danger: true,
-              loading: isPending,
+          <Dropdown
+            trigger={['click']}
+            menu={{
+              items: itemsEditTask(record),
             }}
+            placement="bottomRight"
           >
-            <Tooltip title={'Delete'}>
-              <DeleteOutlined className="cursor-pointer hover:opacity-70 text-red-100 text-xl" />
-            </Tooltip>
-          </Popconfirm>
+            <Icon
+              IconComponent={DashOutlined}
+              className="cursor-pointer"
+              onClick={() => {}}
+              size={16}
+            />
+          </Dropdown>
         </Space>
       ),
     },
@@ -402,7 +340,7 @@ const TableUser = () => {
           showSizeChanger: false,
         }}
         bordered
-        scroll={{ x: 1300 }}
+        scroll={{ x: 1300, y: 500 }}
         loading={isLoading}
       />
 

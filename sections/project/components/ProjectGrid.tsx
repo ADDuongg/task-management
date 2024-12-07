@@ -17,6 +17,7 @@ import {
   Pagination,
   Popconfirm,
   Select,
+  Tooltip,
 } from 'antd'
 
 import { deleteProject } from '@/action/project'
@@ -84,7 +85,6 @@ const ProjectGrid = () => {
     [setSearch],
   )
 
-  // Refactor modal handlers to update a single state
   const handleOpenModal = (type: ActionData, project?: ProjectInterface) => {
     setModalState((prevState) => ({
       ...prevState,
@@ -200,11 +200,13 @@ const ProjectGrid = () => {
           renderComponent={(item) => (
             <div className="p-4 border-2 border-solid rounded-md flex justify-between">
               <div>
-                <div className="flex">Project name: {item.projectName}</div>
-                <div className="flex">
+                <div className="flex dark:text-white">
+                  Project name: {item.projectName}
+                </div>
+                <div className="flex dark:text-white">
                   Number of tasks: {item.taskId?.length}
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center dark:text-white">
                   Members:
                   <Avatar.Group
                     max={{
@@ -216,16 +218,14 @@ const ProjectGrid = () => {
                     }}
                   >
                     {item.userId.map((user) => (
-                      <Avatar
-                        key={user._id}
-                        src={user.avatar}
-                        alt={user.username}
-                      />
+                      <Tooltip title={user.username} key={user._id}>
+                        <Avatar src={user.avatar} alt={user.username} />
+                      </Tooltip>
                     ))}
                   </Avatar.Group>
                 </div>
 
-                <div className="flex">
+                <div className="flex dark:text-white">
                   Status: {item.status as ProjectStatus}
                 </div>
               </div>
@@ -238,7 +238,7 @@ const ProjectGrid = () => {
               >
                 <Icon
                   IconComponent={DashOutlined}
-                  className="cursor-pointer"
+                  className="cursor-pointer dark:text-white"
                   onClick={() => {}}
                   size={24}
                 />

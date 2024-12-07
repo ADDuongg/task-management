@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { dbConnect } from '@/lib';
-import UserModel from '@/model/user';
+import { UserModel } from '@/model';
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 

@@ -2,7 +2,7 @@ import React from 'react'
 
 import Project from '@/sections/project/Project'
 
-const ProjectManagement = () => {
+const ProjectManagement = async () => {
   return (
     <>
       <Project />

@@ -1,8 +1,9 @@
 'use server'
 import { ProjectInterface } from "@/types";
 import mongoose, { Model, Schema } from "mongoose";
-import TaskModel from "./task";
-import UserModel from "./user";
+import {TaskModel} from "./task";
+import { UserModel } from "./user";
+
 const ProjectSchema: Schema<ProjectInterface> = new Schema(
   {
     projectName: { type: String },
@@ -18,7 +19,6 @@ const ProjectSchema: Schema<ProjectInterface> = new Schema(
   }
 );
 
-const ProjectModel: Model<ProjectInterface> =
+export const ProjectModel: Model<ProjectInterface> =
   mongoose.models.Project || mongoose.model<ProjectInterface>("Project", ProjectSchema, "Project");
 
-export default ProjectModel;

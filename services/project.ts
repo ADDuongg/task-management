@@ -14,7 +14,7 @@ export const projectServices = {
         page?: number;
         limit?: number; 
         filter?: filterInterface<ProjectInterface>[];
-        sort?: sortInterface[];
+        sort?: sortInterface<ProjectInterface>[];
         search?: string;
     }) => {
         const queryParams = new URLSearchParams();

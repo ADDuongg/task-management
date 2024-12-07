@@ -14,7 +14,7 @@ export const userServices = {
         page?: number;
         limit?: number; 
         filter?: filterInterface<UsersInterface>[];
-        sort?: sortInterface[];
+        sort?: sortInterface<UsersInterface>[];
         search?: string;
     }) => {
         const queryParams = new URLSearchParams();
@@ -50,7 +50,7 @@ export const userServices = {
         return res;
     },
 
-    deleteUser: async (id: number) => {
+    deleteUser: async (id: string) => {
         const res = await requests.delete<deleteApiResponse>(`/user?id=${id}`, true);
         return res;
     },

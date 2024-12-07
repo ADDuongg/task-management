@@ -1,22 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
 import { message } from "antd";
+import moment from "moment";
 
 export const convertToDate = (dateString: string): Date => {
     const [day, month, year] = dateString.split('/').map(Number);
     return new Date(year, month - 1, day);
 };
 
-export const calculateRemainingTime = (startDate: string, dueDate: string): number => {
-    const start = convertToDate(startDate);
-    const due = convertToDate(dueDate);
-    
-    const differenceInMilliseconds = due.getTime() - start.getTime();
-    
-    const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24);
-    
-    return differenceInDays;
-};
+export function calculateRemainingTime(startDate: string, dueDate: string): string {
+  const start = moment(startDate);
+  const due = moment(dueDate);
 
+  const daysRemaining = due.diff(start, 'days'); 
+
+  return daysRemaining >= 0 ? daysRemaining.toString() : '0'; 
+}
 export const addAlert = ({type, content}:{type: 'success' | 'error' | 'info' | 'warning', content: string}) => {
     switch (type) {
       case 'success':

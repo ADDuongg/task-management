@@ -1,10 +1,9 @@
-'use server'
 
 import { jwtVerify } from "jose"; 
-import UserModel from "@/model/user";
 import { dbConnect } from "@/lib";
 import { NextResponse } from "next/server";
-
+import { UserModel } from "@/model";
+export const dynamic = "force-dynamic";
 export const GET = async (req: Request) => {
     await dbConnect();
   

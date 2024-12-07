@@ -1,21 +1,18 @@
-'use client'
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 
 import { FileDoneOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
 import Image from 'next/image'
-import { useSearchParams } from 'next/navigation'
 
 import forgotPass from '@/assets/images/forgotPass.png'
 import { FlexContainer, Icon, Typography } from '@/components'
 import { resetPassword } from '@/services'
 import { resetPasswordInterface } from '@/types'
 
-const Login = () => {
-  const emailReset = useSearchParams().get('email')
-  console.log(emailReset)
-
+export const dynamic = 'force-dynamic'
+const ResetPassword = async ({ params }: { params: { email: string } }) => {
+  const emailReset = params.email
   const handleResetPassword = async (data: resetPasswordInterface) => {
     await resetPassword(emailReset || '', data.newPassword || '')
       .then((res) => {
@@ -79,4 +76,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default ResetPassword

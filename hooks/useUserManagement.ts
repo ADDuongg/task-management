@@ -7,10 +7,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { userServices } from '@/services/user'
 import { UserFormRequest, UsersInterface, filterInterface, sortInterface } from '@/types'
 import { addAlert } from '@/utils/commons'
 import { UsersResponse } from '@/types/api'
+import { userServices } from '@/services'
 
 export const useListOfUserManagement = ({
   page,
@@ -23,7 +23,7 @@ export const useListOfUserManagement = ({
   page?: number
   limit?: number
   filter?: filterInterface<UsersInterface>[]
-  sort?: sortInterface[]
+  sort?: sortInterface<UsersInterface>[]
   search?: string
   isPagination?: boolean
 }) => {
@@ -60,7 +60,7 @@ export const useUsersRole = () => {
 export const useDeleteUser = () => {
   const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string) => {
       return await userServices.deleteUser(id)
     },
     onSuccess: async (response) => {
@@ -137,7 +137,6 @@ export const useCreateUser = (onClose: () => void) => {
       }
     });
     avatar && formData.append('avatar', avatar);
-    console.log(formData);
     
     mutation.mutate(formData)
     
@@ -153,7 +152,7 @@ export const useCreateUser = (onClose: () => void) => {
   }
 }
 
-export const useUpdateUser = (user: UsersInterface, onClose: () => void) => {
+export const useUpdateUser = (user: UsersInterface, onClose?: () => void) => {
     const {_id} = user
     const userSchema = z.object({
         email: z
@@ -220,7 +219,7 @@ export const useUpdateUser = (user: UsersInterface, onClose: () => void) => {
         queryKey: ['users', 'all'].map(String),
       })
       addAlert({ type: 'success', content: res.message })
-      onClose()
+      onClose && onClose()
     },
     onError: (error: any) => {
       const errorMessage = error?.response?.data?.message || 'An error occurred'
@@ -240,7 +239,6 @@ export const useUpdateUser = (user: UsersInterface, onClose: () => void) => {
     });
     
     avatar && formData.append('avatar', avatar);
-    console.log(initUpdateUserValue);
     mutation.mutate(formData)
   }
 

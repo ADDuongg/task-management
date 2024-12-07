@@ -5,7 +5,7 @@ import { Typography } from '@/components'
 
 const Project = () => {
   return (
-    <div>
+    <div className="px-3">
       <Typography text="Project Management" fontWeight={true} />
       <ProjectGrid />
     </div>

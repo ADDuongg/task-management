@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken'
 import { NextResponse } from 'next/server'
 
 import { dbConnect } from '@/lib/dbConnect'
-import UserModel from '@/model/user'
 import { UsersInterface } from '@/types'
+import { UserModel } from '@/model'
 
 export const POST = async (req: Request) => {
   await dbConnect()
@@ -35,7 +35,7 @@ export const POST = async (req: Request) => {
     await user.save()
     const token = jwt.sign(
       { id: user._id, email: user.email },
-      process.env.NEXT_PUBLIC_JWT_SECRET,
+      process.env.NEXT_PUBLIC_JWT_SECRET as string,
       { expiresIn: '1h' },
     )
     return NextResponse.json({

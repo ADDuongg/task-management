@@ -5,17 +5,16 @@ export interface TaskInterface {
     _id: string;
     files?: string[];
     subject?: string;
-    done?: string;
+    done?: number;
     startDate?: string;
     dueDate?: string;
-    assignTo?: mongoose.Types.ObjectId;
+    assignTo?: UsersInterface | string;
     status?: TaskStatus;
     descriptions?: string;
     workToDo?: string[];
-    taskOwner?: mongoose.Types.ObjectId;
+    taskOwner?: UsersInterface | string;
     estimateTime?: string
-    /* userId?: mongoose.Types.ObjectId[]; */
-    projectId?: mongoose.Types.ObjectId;
+    projectId?: string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -42,8 +41,8 @@ export interface filterInterface<T> {
   value: string[]
 };
 
-export interface sortInterface {
-  field: string,
+export interface sortInterface<T> {
+  field: keyof T,
   order: SortEnum
 };
 
@@ -64,16 +63,15 @@ export interface UserFormRequest {
 }
 
 export interface TaskFormRequest {
-  assignTo?: string;      
-  dueDate: string;        
-  done: number;      
+  assignTo?: UsersInterface | string | { label: string; value: string; }[];      
+  dueDate: string;
+  done: { label: string; value: number; }[] | number;      
   startDate: string;      
   status: TaskStatus;        
   subject?: string;      
-  taskOwner?: string;    
+  taskOwner?: UsersInterface | string | { label: string; value: string; }[];    
   descriptions?: string;
-  estimateTime?: number;
-  userId?: string[] 
+  estimateTime?: string;
   workToDo?: string[];
   files?: File[] | string[]
 }
@@ -90,8 +88,6 @@ export interface ProjectInterface {
   createdAt?: string;
   updatedAt?: string;
 }
-
-
 export interface ProjectFormRequest {
   projectName: string;
   status: ProjectStatus;
@@ -100,4 +96,39 @@ export interface ProjectFormRequest {
   dueDate?: string;
   taskId?: string[] | TaskInterface[] | { label: string; value: string; }[];
   userId: string[] | UsersInterface[] | { label: string; value: string; }[];
+}
+
+export interface MessageInterface {
+  _id?: string;
+  roomId: mongoose.Schema.Types.ObjectId | string;
+  messages?: {
+    sender: UsersInterface | string;
+    content: string;
+    readBy?: UsersInterface[] | string[];
+    createdAt?: Date;
+  }[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+
+export interface RoomInterface {
+  _id: string;
+  roomName: string; 
+  creator: UsersInterface;
+  participants: UsersInterface[]; 
+  latestMessage: MessageInterface | string;
+}
+
+export interface RoomsFormRequest {
+  roomName: string;
+  participants: string[] | UsersInterface[] | { label: string; value: string; }[];
+}
+
+export interface MessageFormRequest {
+  sender: string;
+  room: string; 
+  content: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

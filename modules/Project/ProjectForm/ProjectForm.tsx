@@ -4,6 +4,7 @@ import { Controller } from 'react-hook-form'
 
 import { Button, Form, Input, Select } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
+import { log } from 'console'
 
 import { FlexContainer } from '@/components'
 import { useProject } from '@/hooks/useProjectManagement'
@@ -20,6 +21,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
   updateData,
 }) => {
   const { form, onSubmit, isPending } = useProject(action, updateData)
+
   const { listOfUserManagement } = useListOfUserManagement({
     isPagination: false,
   })
@@ -33,7 +35,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
     label: user.username || user.email,
     value: user._id,
   }))
-  console.log(action)
 
   return (
     <Form

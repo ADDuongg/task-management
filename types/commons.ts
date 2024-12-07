@@ -8,20 +8,10 @@ export enum SortEnum {
     DESC = 'desc'
 }
 
-
-export interface filterInterface {
-    column: string,
-    value: string
-}
-
-export interface sortInterface {
-    column: string,
-    order: SortEnum
-}
-
 export enum ActionData {
     CREATE= 'create',
     UPDATE= 'update',
+    DELETE='delete',
     VIEW= 'view'
 }
 

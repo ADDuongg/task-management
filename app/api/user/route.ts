@@ -5,9 +5,9 @@ import jwt from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
 import { dbConnect } from '@/lib'
-import UserModel from '@/model/user'
 import { RoleEnum, UsersInterface, filterInterface, sortInterface } from '@/types'
 import { deleteImageToCloudinary, getPublicIdFromUrl, uploadImageToCloudinary } from '@/utils/cloudinary'
+import { UserModel } from '@/model'
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -28,7 +28,7 @@ export const POST = async (request: NextRequest) => {
       const {
         filter,
         sort,
-      }: { filter: filterInterface<UsersInterface>[]; sort: sortInterface[] } =
+      }: { filter: filterInterface<UsersInterface>[]; sort: sortInterface<UsersInterface>[] } =
         await request.json()
 
       const filterQuery: Record<string, any>[] = []
@@ -60,9 +60,6 @@ export const POST = async (request: NextRequest) => {
           {'username': { $regex: search, $options: 'i' }}
         ]
       }
-      /* console.log(filterQuery); */
-      console.log(sortQuery);
-      console.log(finalFilterQuery);
       const totalRecords = await UserModel.countDocuments(finalFilterQuery)
       const users = await UserModel.find(finalFilterQuery)
         .sort(sortQuery)
@@ -242,7 +239,6 @@ export const PUT = async (request: NextRequest) => {
     user.phone_number = phone_number || user.phone_number
     user.skills = skills || user.skills
     user.date = date || user.date
-    console.log(date);
     
     if (password) {
       const salt = await bcrypt.genSalt(10)
@@ -269,6 +265,29 @@ export const PUT = async (request: NextRequest) => {
     console.error(error)
     return NextResponse.json(
       { message: 'An error occurred while updating user', error },
+      { status: 500 },
+    )
+  }
+}
+
+
+export const GET = async (request: NextRequest) => {
+  await dbConnect()
+  try {
+    const { searchParams } = new URL(request.url)
+    const userId = searchParams.get('id')
+    const user = await UserModel.findById(userId)
+    if (!user) {
+      return NextResponse.json({ message: 'User not found' }, { status: 404 })
+    }
+    return NextResponse.json({
+      user,
+      status: 200
+    })
+  } catch (error) {
+    console.error(error)
+    return NextResponse.json(
+      { message: 'An error occurred while fetching user', error },
       { status: 500 },
     )
   }

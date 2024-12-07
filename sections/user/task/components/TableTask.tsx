@@ -1,9 +1,11 @@
-import React, { useCallback, useState } from 'react'
+'use client'
+
+import React from 'react'
 
 import {
   ClockCircleOutlined,
   DashOutlined,
-  DeleteOutlined,
+  DeleteFilled,
   EditOutlined,
   FilterOutlined,
   MenuFoldOutlined,
@@ -20,204 +22,116 @@ import {
   Select,
   Space,
   Table,
-  Tooltip,
 } from 'antd'
 import { TableProps } from 'antd/lib'
+import { useAtomValue } from 'jotai'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { FlexContainer, Icon, Typography } from '@/components'
-import { useDebounce } from '@/hooks/useDebounce'
-import { useListOfTaskManagement } from '@/hooks/useTaskManagement'
+import { useHandleDataTable } from '@/hooks/useHandleDataTable'
 import {
-  RoleEnum,
-  SortEnum,
-  TaskInterface,
-  UsersInterface,
-  filterInterface,
-  sortInterface,
-} from '@/types'
-
-const itemsEditTask = (_id: string) => {
-  return [
-    {
-      key: '2',
-      label: (
-        <Link
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-          className="flex gap-x-3 !text-blackSmall-100 justify-between"
-        >
-          <ClockCircleOutlined
-            className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl"
-            onClick={() => {}}
-          />
-          Logtime
-        </Link>
-      ),
-    },
-    {
-      key: '3',
-      label: (
-        <Link
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-          className="flex gap-x-3 !text-blackSmall-100 justify-between"
-        >
-          <EditOutlined
-            key={`edit`}
-            className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl"
-            onClick={() => {}}
-          />
-          Edit
-        </Link>
-      ),
-    },
-    {
-      key: '4',
-      label: (
-        <Popconfirm
-          key={`delete`}
-          title={'Confirm'}
-          placement="left"
-          description={'Are you sure you want to delete this user?'}
-          onConfirm={() => {}}
-          cancelText={'Cancel'}
-          okText={'OK'}
-          cancelButtonProps={{
-            type: 'primary',
-            danger: true,
-          }}
-        >
-          <div className="flex gap-x-3 !text-blackSmall-100 justify-between">
-            <DeleteOutlined className="cursor-pointer hover:opacity-70 text-red-100 text-xl" />
-            Delete
-          </div>
-        </Popconfirm>
-      ),
-    },
-  ]
-}
+  useDeleteTask,
+  useListOfTaskManagement,
+} from '@/hooks/useTaskManagement'
+import { userRoleState } from '@/states/users'
+import { SortEnum, TaskInterface, UsersInterface } from '@/types'
 
 const { Option } = Select
-const TableTask = () => {
+export const TableTask = () => {
   const router = useRouter()
-  const [page, setPage] = useState<number>(1)
-  const [sort, setSort] = useState<sortInterface[]>([])
-  const [filter, setFilter] = useState<filterInterface<TaskInterface>[]>([])
-  const [limit, setLimit] = useState<number>(5)
-  const [search, setSearch] = useState<string>('')
-  const [task, setTask] = useState<UsersInterface>()
-
-  const debouncedSearchTerm = useDebounce(search, 300)
+  const role = useAtomValue(userRoleState)
+  const {
+    sort,
+    filter,
+    page,
+    limit,
+    search,
+    setPage,
+    clearSort,
+    clearFilter,
+    clearAll,
+    handleSortChange,
+    handleFilterChange,
+    getSortOrder,
+    handleLimitChange,
+    handleSearchChange,
+  } = useHandleDataTable<TaskInterface>()
   const { listOfTaskManagement, pagination, isLoading } =
     useListOfTaskManagement({
       page,
       limit,
       filter,
       sort,
-      search: debouncedSearchTerm,
+      search,
     })
+  const { deleteTask, isPending } = useDeleteTask()
   const { totalPages, currentPage, pageSize } = pagination || {}
 
-  const handleSortChange = useCallback(
-    (field: keyof TaskInterface) => {
-      setSort((prevFields) => {
-        const existingField = prevFields?.find((f) => f.field === field)
-        if (existingField) {
-          return prevFields?.map((f) =>
-            f.field === field
-              ? {
-                  ...f,
-                  order:
-                    f.order === SortEnum.ASC ? SortEnum.DESC : SortEnum.ASC,
-                }
-              : f,
-          )
-        } else {
-          return [...prevFields, { field, order: SortEnum.ASC }]
-        }
-      })
-    },
-    [setSort],
-  )
-
-  const handleFilterChange = useCallback(
-    (column: keyof TaskInterface, value: string, checked: boolean) => {
-      setFilter((prevFilter) => {
-        const existingFilter = prevFilter.find(
-          (filterItem) => filterItem.field === column,
-        )
-
-        if (existingFilter) {
-          if (checked) {
-            if (!existingFilter.value.includes(value)) {
-              return prevFilter.map((filterItem) =>
-                filterItem.field === column
-                  ? { ...filterItem, value: [...filterItem.value, value] }
-                  : filterItem,
-              )
-            }
-          } else {
-            return prevFilter
-              .map((filterItem) =>
-                filterItem.field === column
-                  ? {
-                      ...filterItem,
-                      value: filterItem.value.filter((v) => v !== value),
-                    }
-                  : filterItem,
-              )
-              .filter((filterItem) => filterItem.value.length > 0)
-          }
-        } else {
-          return checked
-            ? [...prevFilter, { field: column, value: [value] }]
-            : prevFilter
-        }
-
-        return prevFilter
-      })
-    },
-    [setFilter],
-  )
-
-  const getSortOrder = useCallback(
-    (field: keyof TaskInterface) => {
-      const sortField = sort?.find((f) => f.field === field)
-      return sortField ? sortField.order : undefined
-    },
-    [sort],
-  )
-  const handleLimitChange = useCallback(
-    (value: number) => {
-      setLimit(value)
-    },
-    [setLimit],
-  )
-
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearch(e.target.value)
-    },
-    [setSearch],
-  )
-
-  const clearSort = useCallback(() => {
-    setSort([])
-  }, [setSort])
-
-  const clearFilter = useCallback(() => {
-    setFilter([])
-  }, [setFilter])
-
-  const clearAll = useCallback(() => {
-    setSort([])
-    setFilter([])
-  }, [setSort, setFilter])
-
+  const itemsActionRow = (_id: string) => {
+    return [
+      {
+        key: '2',
+        label: (
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://www.antgroup.com"
+            className="flex gap-x-3 !text-blackSmall-100 justify-between dark:text-white"
+          >
+            <ClockCircleOutlined
+              className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl"
+              onClick={() => {}}
+            />
+            Logtime
+          </Link>
+        ),
+      },
+      {
+        key: '3',
+        label: (
+          <Link
+            rel="noopener noreferrer"
+            href={`/dashboard/${role}/task/${_id}/edit`}
+            className="flex gap-x-3 !text-blackSmall-100 justify-between dark:text-white"
+          >
+            <EditOutlined
+              key={`edit`}
+              className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl"
+              onClick={() => {}}
+            />
+            Edit
+          </Link>
+        ),
+      },
+      {
+        key: '4',
+        label: (
+          <Popconfirm
+            key={`delete`}
+            title={'Confirm'}
+            placement="left"
+            description={'Are you sure you want to delete this user?'}
+            onConfirm={() => deleteTask(_id)}
+            cancelText={'Cancel'}
+            okText={'OK'}
+            cancelButtonProps={{
+              type: 'primary',
+              danger: true,
+            }}
+            okButtonProps={{
+              loading: isPending,
+            }}
+          >
+            <div className="flex gap-x-3  justify-between text-red-500">
+              <DeleteFilled className="cursor-pointer  text-xl" />
+              Delete
+            </div>
+          </Popconfirm>
+        ),
+      },
+    ]
+  }
   const columns: TableProps<TaskInterface>['columns'] = [
     {
       title: 'ID',
@@ -381,7 +295,7 @@ const TableTask = () => {
           <Dropdown
             trigger={['click']}
             menu={{
-              items: itemsEditTask(_id),
+              items: itemsActionRow(_id),
             }}
             placement="bottomRight"
           >
@@ -422,20 +336,18 @@ const TableTask = () => {
         <Icon
           IconComponent={MenuFoldOutlined}
           size={16}
-          className="cursor-pointer"
+          className="cursor-pointer dark:text-white"
           onClick={() => {}}
         />
       </Dropdown>
 
-      <Button
-        onClick={() => router.push(`/dashboard/${RoleEnum.USER}/task/create`)}
-      >
+      <Button onClick={() => router.push(`/dashboard/${role}/task/create`)}>
         Add new task
       </Button>
     </div>
   )
   return (
-    <>
+    <div className="p-3">
       <Typography text="List task" fontWeight={true} />
       <div className="text-red-500 md:hidden">sdsdsd</div>
       <div className="flex flex-row justify-between xl:items-center items-start gap-y-5 my-5">
@@ -474,11 +386,9 @@ const TableTask = () => {
           showSizeChanger: false,
         }}
         bordered
-        scroll={{ x: 1300 }}
+        scroll={{ x: 1300, y: 500 }}
         loading={isLoading}
       />
-    </>
+    </div>
   )
 }
-
-export default TableTask

@@ -36,6 +36,7 @@ const UserForm: React.FC<UserFormProps> = ({
   defaultAvatar,
 }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([])
+
   const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     if (fileList.length > 0) {
       return
@@ -49,7 +50,6 @@ const UserForm: React.FC<UserFormProps> = ({
       setValue('avatar', undefined)
     }
   }
-  console.log(fileList)
 
   useEffect(() => {
     if (defaultAvatar) {

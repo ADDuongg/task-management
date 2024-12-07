@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 
 import {
@@ -23,32 +25,46 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   detailTask = false,
 }) => {
   return (
-    <div className="p-5 space-y-2">
+    <div className="p-5 space-y-2  ">
       <div className="h-44 !flex flex-col items-start">
-        <Image src={task.img} className="w-full h-full" alt="" />
+        <Image
+          src={task.files ? task.files[0] : ''}
+          className="w-full h-full rounded-lg"
+          alt=""
+          width={300}
+          height={0}
+        />
       </div>
       <div className="flex justify-between items-center w-full">
-        <div className="font-bold text-lg">{task.name}</div>
+        <div className="font-bold text-lg dark:text-white">
+          {task.startDate}
+        </div>
         <div>
-          status: <span className="font-bold">{task.status}</span>
+          status:{' '}
+          <span className="font-bold dark:text-white">{task.status}</span>
         </div>
       </div>
       <div className="flex flex-col justify-between w-full">
         <div className="flex items-center gap-x-3">
           <Typography text="Progress:" fontWeight={true} />
-          <Typography text={task.done} color="blueSmall-100" />
+          <Typography text={String(task.done || 0)} color="blueSmall-100" />
         </div>
         <Progress
-          percent={Number(task.done.replace('%', ''))}
-          className="w-full"
+          percent={Number(String(task.done).replace('%', ''))}
+          className="w-full dark:text-white"
           showInfo={false}
         />
       </div>
       <div className="flex items-center justify-between w-full">
         <div className="flex justify-between items-center gap-x-3">
-          <Icon IconComponent={ClockCircleOutlined} size={20} />
-          <span className="font-bold text-xl">
-            {calculateRemainingTime(task.startDate, task.dueDate)} day left
+          <Icon
+            className="dark:text-white"
+            IconComponent={ClockCircleOutlined}
+            size={20}
+          />
+          <span className="font-bold text-xl dark:text-white">
+            {calculateRemainingTime(task.startDate || '', task.dueDate || '')}{' '}
+            day left
           </span>
         </div>
 
@@ -82,7 +98,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
       {detailTask && (
         <div>
-          <hr className="my-5" />
+          <hr className="my-6" />
           <div className="flex justify-between">
             <Typography text="Detail Task" fontWeight={true} />
             <Typography

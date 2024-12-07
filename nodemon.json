@@ -1,0 +1,6 @@
+{
+  "watch": ["server.ts", "tsconfig.server.json"],
+  "ext": "ts,tsx,js,json",  
+  "ignore": ["node_modules", ".next"],  
+  "exec": "tsx server.ts" 
+}

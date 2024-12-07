@@ -48,16 +48,15 @@ export default function RootLayout({
   return (
     <div className="h-screen flex">
       <Sidebar />
-      <div className="w-[calc(100%-300px)] flex-1">
+      <div className="w-[calc(100%-300px)] flex-1 dark:bg-black bg-graySmall-100">
         {shouldShowHeader && <Header />}
         <div
           style={{
             height: shouldShowHeader ? 'calc(100vh - 112px)' : '100vh',
-            backgroundColor: 'var(--color-graySmall-200)',
             width: '100%',
             overflowY: 'auto',
           }}
-          className="sm:px-8 px-4"
+          className=""
         >
           {children}
         </div>

@@ -53,6 +53,5 @@ const UserSchema: Schema<UsersInterface> = new Schema({
   timestamps: true, 
 });
 
-const UserModel: Model<UsersInterface> = mongoose.models.User || mongoose.model<UsersInterface>('User', UserSchema, 'User');
+export const UserModel: Model<UsersInterface> = mongoose.models.User || mongoose.model<UsersInterface>('User', UserSchema, 'User');
 
-export default UserModel;

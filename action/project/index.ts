@@ -1,5 +1,5 @@
 'use server'
-import ProjectModel from "@/model/project";
+import { ProjectModel } from "@/model";
 import { ProjectFormRequest } from "@/types";
 import { convertMongoToPlainObject } from "@/utils/commons";
 

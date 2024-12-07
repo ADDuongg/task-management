@@ -1,10 +1,10 @@
 'use server'
 
-import UserModel from "@/model/user";
 import { NextResponse } from "next/server";
 import bcrypt from 'bcrypt';
 import { dbConnect } from "@/lib";
 import { SignJWT } from "jose";
+import { UserModel } from "@/model";
 export const POST = async (req: Request) => {
     await dbConnect();
     try {

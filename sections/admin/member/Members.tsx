@@ -5,7 +5,7 @@ import { Typography } from '@/components'
 
 export const AdminMembersManagement = () => {
   return (
-    <div>
+    <div className="p-3">
       <Typography text="User Management" fontWeight={true} />
       <TableUser />
     </div>
