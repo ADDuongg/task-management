@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   ClockCircleOutlined,
@@ -25,6 +25,7 @@ import {
 } from 'antd'
 import { TableProps } from 'antd/lib'
 import { useAtomValue } from 'jotai'
+import moment from 'moment'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -34,8 +35,9 @@ import {
   useDeleteTask,
   useListOfTaskManagement,
 } from '@/hooks/useTaskManagement'
+import { ModalLogtime } from '@/modules/Task/Logtime'
 import { userRoleState } from '@/states/users'
-import { SortEnum, TaskInterface, UsersInterface } from '@/types'
+import { ActionData, SortEnum, TaskInterface, UsersInterface } from '@/types'
 
 const { Option } = Select
 export const TableTask = () => {
@@ -67,24 +69,23 @@ export const TableTask = () => {
     })
   const { deleteTask, isPending } = useDeleteTask()
   const { totalPages, currentPage, pageSize } = pagination || {}
-
-  const itemsActionRow = (_id: string) => {
+  const [openModalLogtime, setOpenModalLogtime] = useState(false)
+  const [task, setTask] = useState<TaskInterface>()
+  const itemsActionRow = (task: TaskInterface) => {
     return [
       {
         key: '2',
         label: (
-          <Link
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.antgroup.com"
+          <div
             className="flex gap-x-3 !text-blackSmall-100 justify-between dark:text-white"
+            onClick={() => {
+              setOpenModalLogtime(true)
+              setTask(task)
+            }}
           >
-            <ClockCircleOutlined
-              className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl"
-              onClick={() => {}}
-            />
+            <ClockCircleOutlined className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl" />
             Logtime
-          </Link>
+          </div>
         ),
       },
       {
@@ -92,7 +93,7 @@ export const TableTask = () => {
         label: (
           <Link
             rel="noopener noreferrer"
-            href={`/dashboard/${role}/task/${_id}/edit`}
+            href={`/dashboard/${role}/task/${task._id}/edit`}
             className="flex gap-x-3 !text-blackSmall-100 justify-between dark:text-white"
           >
             <EditOutlined
@@ -112,7 +113,7 @@ export const TableTask = () => {
             title={'Confirm'}
             placement="left"
             description={'Are you sure you want to delete this user?'}
-            onConfirm={() => deleteTask(_id)}
+            onConfirm={() => deleteTask(task._id)}
             cancelText={'Cancel'}
             okText={'OK'}
             cancelButtonProps={{
@@ -173,6 +174,9 @@ export const TableTask = () => {
     {
       title: 'Created',
       dataIndex: 'createdAt',
+      render: (createdAt: string) => (
+        <div>{moment(createdAt).format('DD/MM/YYYY')}</div>
+      ),
     },
     {
       title: 'Start date',
@@ -295,7 +299,7 @@ export const TableTask = () => {
           <Dropdown
             trigger={['click']}
             menu={{
-              items: itemsActionRow(_id),
+              items: itemsActionRow(record),
             }}
             placement="bottomRight"
           >
@@ -349,7 +353,6 @@ export const TableTask = () => {
   return (
     <div className="p-3">
       <Typography text="List task" fontWeight={true} />
-      <div className="text-red-500 md:hidden">sdsdsd</div>
       <div className="flex flex-row justify-between xl:items-center items-start gap-y-5 my-5">
         <FlexContainer className="!w-1/2" justifyContent="flex-end">
           <Input
@@ -389,6 +392,14 @@ export const TableTask = () => {
         scroll={{ x: 1300, y: 500 }}
         loading={isLoading}
       />
+      {openModalLogtime && task && (
+        <ModalLogtime
+          open={openModalLogtime}
+          onCancel={() => setOpenModalLogtime(false)}
+          task={task}
+          action={ActionData.CREATE}
+        />
+      )}
     </div>
   )
 }

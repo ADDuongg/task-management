@@ -105,10 +105,11 @@ export const POST = async (request: NextRequest) => {
       const status = formData.get('status') as string
       const descriptions = formData.get('descriptions') as string | null
       const workToDo = formData.getAll('workToDo') as string[]
+      const projectId = formData.get('projectId') as string
       const taskOwner = formData.get('taskOwner') as string
       const estimateTime = formData.get('estimateTime') as string
       // const userId = formData.getAll('userId') as string[]
-
+      console.log('projectId', projectId)
       const existingUser = await TaskModel.findOne({
         $or: [{ subject }],
       })
@@ -132,6 +133,7 @@ export const POST = async (request: NextRequest) => {
         status,
         subject,
         taskOwner,
+        projectId,
         // userId,
         workToDo,
       })

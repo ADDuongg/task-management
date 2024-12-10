@@ -13,6 +13,7 @@ const TaskSchema: Schema<TaskInterface> = new Schema(
     descriptions: { type: String },
     workToDo: { type: [String], default: [] },
     taskOwner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
     estimateTime: { type: String },
   },
   {

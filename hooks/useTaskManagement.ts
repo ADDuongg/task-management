@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
 
-import { ActionData, filterInterface, sortInterface, TaskFormRequest, TaskInterface, TaskStatus, UsersInterface } from '@/types'
+import { ActionData, filterInterface, ProjectInterface, sortInterface, TaskFormRequest, TaskInterface, TaskStatus, UsersInterface } from '@/types'
 import { addAlert } from '@/utils/commons'
 import { TasksResponse } from '@/types/api'
 import { deleteTask, updateTask } from '@/action/task'
@@ -28,6 +28,20 @@ const taskSchema = z.object({
     }),
   ]),
   dueDate: z.string().nonempty('Due date is required'),
+  projectId: 
+  z.union([
+    z.array(
+      z.object({
+        label: z.string().optional(),
+        value: z.string().optional(),
+      })
+    ),
+    z.string(),
+    z.object({
+      label: z.string().optional(),
+      value: z.string().optional(),
+    }),
+  ]),
   done: 
     z.union([
       z.array(
@@ -139,6 +153,7 @@ export const useCreateTask = () => {
   const onSubmit = async (data: TaskFormRequest) => {
     const { files, ...finalData } = data;
     const formData = new FormData();
+    console.log('data',data);
     
     Object.entries(finalData).forEach(([key, value]) => {
       if (Array.isArray(value)) {
@@ -181,6 +196,9 @@ export const useUpdateTask = (task: TaskInterface) => {
     function isUsersInterface(value: string | UsersInterface | undefined): value is UsersInterface {
       return typeof value !== 'string';
     }
+    function isProjectInterface(value: string | ProjectInterface | undefined): value is ProjectInterface {
+      return typeof value !== 'string';
+    }
     const mappedAssignTo = [
       {
         label: isUsersInterface(task.assignTo) ? task.assignTo.username : 'Unknown User',
@@ -194,7 +212,12 @@ export const useUpdateTask = (task: TaskInterface) => {
         value: isUsersInterface(task.taskOwner) ? task.taskOwner._id : 'Unknown ID',
       }
     ]
-      
+    const mappedProjectId = [
+      {
+        label: isProjectInterface(task.projectId) ? task.projectId.projectName : 'Unknown User',
+        value: isProjectInterface(task.projectId) ? task.projectId._id : 'Unknown ID',
+      }
+    ]
   
   const defaultValues: TaskFormRequest = {
     assignTo: mappedAssignTo,
@@ -204,6 +227,7 @@ export const useUpdateTask = (task: TaskInterface) => {
     status: task.status || TaskStatus.OPENTODO,
     subject: task.subject || '',
     taskOwner: mappedTaskOwner,
+    projectId: mappedProjectId,
     descriptions: task.descriptions || '',
     estimateTime: task.estimateTime || '',
     workToDo: task.workToDo || [],
@@ -258,6 +282,16 @@ export const useUpdateTask = (task: TaskInterface) => {
       }
     })
     : data.taskOwner; 
+    const normalizedProjectId = Array.isArray(data.projectId)
+    ? data.projectId.map((item) => {
+      if (typeof item === 'string') {
+        return item; 
+      } else {
+        return item.value; 
+      }
+    })
+    : data.projectId;
+
     const normalizedAssignTo = Array.isArray(data.assignTo)
     ? data.assignTo.map((item) => {
       if (typeof item === 'string') {
@@ -268,7 +302,7 @@ export const useUpdateTask = (task: TaskInterface) => {
     })
     : data.assignTo;  
 
-    const updatedData = { ...data, done: normalizedDone, taskOwner: normalizedTaskOwner, assignTo: normalizedAssignTo };
+    const updatedData = { ...data, done: normalizedDone, taskOwner: normalizedTaskOwner, assignTo: normalizedAssignTo, projectId: normalizedProjectId };
     const { files, workToDo, ...finalData } = updatedData;
 
     const formData = new FormData();

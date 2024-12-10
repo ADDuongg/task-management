@@ -29,6 +29,7 @@ import {
   ModalUpdateProject,
   ModalViewProject,
 } from '@/modules/Project'
+import { ModalViewLogtime } from '@/modules/Project/ViewLogtime'
 import {
   ActionData,
   ProjectInterface,
@@ -37,7 +38,7 @@ import {
 } from '@/types'
 
 const { Option } = Select
-const ProjectGrid = () => {
+export const ProjectGrid = () => {
   const [page, setPage] = useState<number>(1)
   const [filter, setFilter] = useState<filterInterface<ProjectInterface>[]>([])
   const [limit, setLimit] = useState<number>(10)
@@ -47,11 +48,13 @@ const ProjectGrid = () => {
     create: boolean
     view: boolean
     update: boolean
+    view_logtime: boolean
     project: ProjectInterface | null
   }>({
     create: false,
     view: false,
     update: false,
+    view_logtime: false,
     project: null,
   })
 
@@ -105,8 +108,22 @@ const ProjectGrid = () => {
     await deleteProject(id)
   }
 
+  console.log('open', modalState.view_logtime)
+
   const itemsEditTask = (project: ProjectInterface) => {
     return [
+      {
+        key: '1',
+        label: (
+          <div
+            className="flex gap-x-3 w-full"
+            onClick={() => handleOpenModal(ActionData.VIEW_LOGTIME)}
+          >
+            <EyeOutlined className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl" />
+            <span>View All Logtime</span>
+          </div>
+        ),
+      },
       {
         key: '2',
         label: (
@@ -115,7 +132,7 @@ const ProjectGrid = () => {
             onClick={() => handleOpenModal(ActionData.VIEW, project)}
           >
             <EyeOutlined className="cursor-pointer hover:opacity-70 text-darkBlue-200 text-xl" />
-            <span>View</span>
+            <span>View Project detail</span>
           </div>
         ),
       },
@@ -274,8 +291,12 @@ const ProjectGrid = () => {
           updateProject={modalState.project}
         />
       )}
+      {modalState.view_logtime && (
+        <ModalViewLogtime
+          open={modalState.view_logtime}
+          onCancel={() => handleCloseModal(ActionData.VIEW_LOGTIME)}
+        />
+      )}
     </>
   )
 }
-
-export default ProjectGrid

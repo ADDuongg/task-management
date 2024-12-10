@@ -6,7 +6,7 @@ const Layout = ({
   children: React.ReactNode
 }>) => {
   return (
-    <div className="w-full h-screen verflow-y-auto flex justify-center items-center">
+    <div className="dark:bg-blackSmall-100 w-full h-screen overflow-y-auto flex justify-center items-center">
       <div className="w-full h-full overflow-y-auto flex justify-center items-center">
         {children}
       </div>

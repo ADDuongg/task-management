@@ -9,6 +9,7 @@ import Link from 'next/link'
 
 import { UploadFileTask, WorkTodo } from '../components'
 import { FlexContainer, Typography } from '@/components'
+import { useListOfProjectManagement } from '@/hooks/useProjectManagement'
 import { useListOfUserManagement } from '@/hooks/useUserManagement'
 import { userRoleState } from '@/states/users'
 import { TaskFormRequest, TaskInterface, TaskStatus } from '@/types'
@@ -55,6 +56,11 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   const { listOfUserManagement } = useListOfUserManagement({
     isPagination: false,
   })
+
+  const { listOfProjectManagement } = useListOfProjectManagement({
+    isPagination: false,
+  })
+
   const userOption = listOfUserManagement.map((item) => ({
     label: item.username,
     value: item._id,
@@ -64,6 +70,11 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   useEffect(() => {
     updateTaskData && setTodos(updateTaskData.workToDo || [])
   }, [updateTaskData])
+
+  const projectOption = listOfProjectManagement?.map((project) => ({
+    label: project.projectName,
+    value: project._id,
+  }))
   const role = useAtomValue(userRoleState)
   return (
     <>
@@ -92,8 +103,31 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         className="flex xl:flex-row flex-col justify-between h-full overflow-y-auto xl:gap-y-0 gap-y-5 gap-x-8 mt-2"
         style={{ padding: '0 8rem' }}
       >
-        <div className=" xl:w-[calc(100%-450px)] w-full flex flex-col gap-y-10 h-auto bg-whiteSmall-100 dark:bg-blackSmall-100 rounded-lg p-5">
+        <div className=" xl:w-[calc(100%-450px)] w-full flex flex-col gap-y-5 h-auto bg-whiteSmall-100 dark:bg-blackSmall-100 rounded-lg p-5">
           <Typography text="Task infomation" />
+          <Controller
+            control={control}
+            name="projectId"
+            render={({ field }) => (
+              <Form.Item
+                label="Project"
+                layout="vertical"
+                validateStatus={errors.projectId ? 'error' : ''}
+                help={
+                  typeof errors.projectId?.message === 'string'
+                    ? errors.projectId.message
+                    : undefined
+                }
+              >
+                <Select
+                  {...field}
+                  placeholder="Please select"
+                  style={{ width: '100%' }}
+                  options={projectOption}
+                />
+              </Form.Item>
+            )}
+          />
           <FlexContainer justifyContent="space-between">
             <Controller
               name="subject"

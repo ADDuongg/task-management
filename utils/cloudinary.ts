@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
 import { v2 as cloudinary } from 'cloudinary'
 
 export const getPublicIdFromUrl = (url:string) => {

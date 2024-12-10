@@ -4,7 +4,7 @@ import { ProjectStatus, RoleEnum, SortEnum, TaskStatus } from "./commons";
 export interface TaskInterface {
     _id: string;
     files?: string[];
-    subject?: string;
+    subject: string;
     done?: number;
     startDate?: string;
     dueDate?: string;
@@ -14,7 +14,7 @@ export interface TaskInterface {
     workToDo?: string[];
     taskOwner?: UsersInterface | string;
     estimateTime?: string
-    projectId?: string;
+    projectId?: ProjectInterface | string;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -70,6 +70,7 @@ export interface TaskFormRequest {
   status: TaskStatus;        
   subject?: string;      
   taskOwner?: UsersInterface | string | { label: string; value: string; }[];    
+  projectId?: ProjectInterface | string | { label: string; value: string; }[];
   descriptions?: string;
   estimateTime?: string;
   workToDo?: string[];
@@ -110,8 +111,6 @@ export interface MessageInterface {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-
 export interface RoomInterface {
   _id: string;
   roomName: string; 
@@ -119,7 +118,6 @@ export interface RoomInterface {
   participants: UsersInterface[]; 
   latestMessage: MessageInterface | string;
 }
-
 export interface RoomsFormRequest {
   roomName: string;
   participants: string[] | UsersInterface[] | { label: string; value: string; }[];
@@ -132,3 +130,26 @@ export interface MessageFormRequest {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface LogtimeInterface {
+  _id: string;
+  activity: string;
+  userId: UsersInterface | string;
+  taskId: TaskInterface ;
+  comment: string;
+  dateLogtime: string;
+  timeLogtime: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface logtimeFormRequest {
+  _id?: string;
+  activity: string | { label: string; value: string; }[];
+  userId: string;
+  taskId: string | string[] | { label: string; value: string; }[];
+  comment: string;
+  dateLogtime: string;
+  timeLogtime: number;
+}
+  

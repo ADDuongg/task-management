@@ -47,7 +47,7 @@ const Login = () => {
   }
 
   return (
-    <div className="w-[1200px] mx-auto max-w-[80%] h-auto border border-1 rounded-lg shadow-sm p-8 flex gap-x-5 lg:flex-row flex-col">
+    <div className="dark:bg-blackSmall-100 w-[1200px] mx-auto max-w-[80%] h-auto border border-1 rounded-lg shadow-sm p-8 flex gap-x-5 lg:flex-row flex-col">
       <div className="lg:w-[40%] w-full h-full flex flex-col items-start gap-5">
         <span className="text-red-500 md:hidden">sss</span>
         <FlexContainer>
