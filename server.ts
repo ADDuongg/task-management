@@ -108,7 +108,7 @@ app.prepare().then(() => {
     });
   });
 
-  server.listen(3000, (err?: Error) => {
+  server.listen(3002, (err?: Error) => {
     if (err) throw err;
     console.log("> Server listening on http://localhost:3000");
   });
