@@ -1,8 +1,6 @@
-import React from 'react'
-
 import { cookies } from 'next/headers'
 
-import { dbConnect, getAllUsers } from '@/lib'
+import { dbConnect } from '@/lib'
 import { UserModel } from '@/model'
 import { Profile } from '@/sections/profile'
 

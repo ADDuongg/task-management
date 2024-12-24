@@ -12,7 +12,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { Avatar, Badge, Dropdown } from 'antd'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
