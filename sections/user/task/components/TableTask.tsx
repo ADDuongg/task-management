@@ -40,7 +40,7 @@ import { userRoleState } from '@/states/users'
 import { ActionData, SortEnum, TaskInterface, UsersInterface } from '@/types'
 
 const { Option } = Select
-export const TableTask = () => {
+export const TableTask = ({ projectId }: { projectId: string }) => {
   const router = useRouter()
   const role = useAtomValue(userRoleState)
   const {
@@ -66,6 +66,7 @@ export const TableTask = () => {
       filter,
       sort,
       search,
+      projectId,
     })
   const { deleteTask, isPending } = useDeleteTask()
   const { totalPages, currentPage, pageSize } = pagination || {}

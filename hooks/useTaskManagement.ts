@@ -94,7 +94,8 @@ export const useListOfTaskManagement = ({
   filter,
   sort,
   search,
-  isPagination = true
+  isPagination = true,
+  projectId
 }: {
   page?: number
   limit?: number
@@ -102,6 +103,7 @@ export const useListOfTaskManagement = ({
   sort?: sortInterface<TaskInterface>[]
   search?: string
   isPagination?: boolean
+  projectId?: string
 }) => {
   const { data, error, isLoading } = useQuery<TasksResponse>({
     queryKey: ['tasks', 'all', page, limit, filter, sort, search],
@@ -114,7 +116,7 @@ export const useListOfTaskManagement = ({
     }
   })
   return {
-    listOfTaskManagement: data?.tasks || [],
+    listOfTaskManagement: (projectId ? data?.tasks?.filter(item => item.projectId?._id === projectId) : data?.tasks) || [],
     pagination: data?.pagination,
     error,
     isLoading,
@@ -172,9 +174,6 @@ export const useCreateTask = () => {
     mutation.mutate(formData);
   };
   
-  
-  
-
   return {
     control,
     createTask: handleSubmit(onSubmit),

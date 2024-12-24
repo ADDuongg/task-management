@@ -4,10 +4,13 @@ import React, { useState } from 'react'
 
 import { Button, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
+import { useAtomValue } from 'jotai'
 import moment from 'moment'
 
 import { Typography } from '@/components'
 import { useListOfLogtime } from '@/hooks/useLogtime'
+import { currentUserState } from '@/states/users'
+import { isAdminRole } from '@/utils/commons'
 
 interface Task {
   taskName: string
@@ -70,6 +73,7 @@ const generateDates = (year: number, month: number): DateInfo[] => {
 
 export const Logtime: React.FC = () => {
   const currentDate = new Date()
+  const userValue = useAtomValue(currentUserState)
   const [currentYear, setCurrentYear] = useState<number>(
     currentDate.getFullYear(),
   )
@@ -78,20 +82,16 @@ export const Logtime: React.FC = () => {
   )
   const { listOfLogtime, pagination, isLoading } = useListOfLogtime({
     isPagination: false,
+    currentUserId: userValue && isAdminRole(userValue),
   })
   const dates = generateDates(currentYear, currentMonth)
-  const tasks = listOfLogtime?.map((logtime) => ({
-    taskName: logtime.taskId.subject,
-    timeLogtime: logtime.timeLogtime,
-    dateLogtime: moment(logtime.dateLogtime).format('DD/MM/YYYY'),
-  }))
-  /* const tasks: Task[] = [
-    { taskName: 'Task 1', timeLogtime: '2', dateLogtime: '01/01/2024' },
-    { taskName: 'Task 2', timeLogtime: '3', dateLogtime: '15/02/2024' },
-    { taskName: 'Task 3', timeLogtime: '1', dateLogtime: '28/02/2024' },
-    { taskName: 'Task 4', timeLogtime: '4', dateLogtime: '08/12/2024' },
-    { taskName: 'Task 5', timeLogtime: '8', dateLogtime: '08/12/2024' },
-  ] */
+  const tasks =
+    listOfLogtime?.map((logtime) => ({
+      taskName: logtime.taskId.subject,
+      timeLogtime: logtime.timeLogtime,
+      dateLogtime: moment(logtime.dateLogtime).format('DD/MM/YYYY'),
+    })) || []
+
   const handlePrevMonth = () => {
     if (currentMonth === 0) {
       setCurrentMonth(11)
@@ -117,6 +117,15 @@ export const Logtime: React.FC = () => {
       dataIndex: 'taskName',
       key: 'taskName',
       fixed: 'left',
+      render: (taskName: string) => (
+        <div className="flex gap-x-3 items-center">
+          <div className="w-full">
+            <div className="flex gap-x-3">
+              <div className="text-sm font-bold">{taskName}</div>
+            </div>
+          </div>
+        </div>
+      ),
       width: 150,
     },
     ...dates.map((date) => ({
@@ -126,19 +135,16 @@ export const Logtime: React.FC = () => {
       align: 'center' as const,
       render: (tasksForDay: Task[] | number | undefined) => {
         if (Array.isArray(tasksForDay)) {
-          // Nếu là mảng, hiển thị các `Task` như cũ
           return tasksForDay.map((task, idx) => (
             <div key={idx}>{task.timeLogtime}</div>
           ))
         } else if (typeof tasksForDay === 'number') {
-          // Nếu là số (dòng totalRow), hiển thị trực tiếp
           return <div>{tasksForDay}</div>
         }
         return ''
       },
     })),
   ]
-
   const dataSource: TaskRow[] = tasks.map((task) => {
     const taskRow: TaskRow = { key: task.taskName, taskName: task.taskName }
 
@@ -164,12 +170,15 @@ export const Logtime: React.FC = () => {
       .toString()
       .padStart(2, '0')}/${currentYear}`
 
-    const totalForDay = tasks
-      .filter((task) => task.dateLogtime === formattedDate)
-      .reduce((sum, task) => sum + Number(task.timeLogtime), 0)
+    const totalForDay =
+      tasks &&
+      tasks
+        .filter((task) => task.dateLogtime === formattedDate)
+        .reduce((sum, task) => sum + Number(task.timeLogtime), 0)
 
     totalRow[`day_${date.day}`] = totalForDay || ''
   })
+
   console.log('data', [...dataSource, totalRow])
 
   return (

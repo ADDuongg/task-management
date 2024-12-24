@@ -23,7 +23,7 @@ export const DetailTaskCard: React.FC<TaskCardProps> = () => {
   const { listOfTaskManagement, isLoading } = useListOfTaskManagement({
     isPagination: false,
   })
-  const task = listOfTaskManagement[0] || {}
+  const task = listOfTaskManagement[0]
   return (
     <div className="space-y-2 rounded-lg dark:bg-blackSmall-100 bg-white overflow-hidden p-3">
       {isLoading ? (

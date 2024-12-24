@@ -12,7 +12,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 import { Avatar, Badge, Dropdown } from 'antd'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -32,11 +32,14 @@ export const Header: React.FC<HeaderProps> = ({ bg = 'white' }) => {
   const { theme, setTheme } = useTheme()
   const router = useRouter()
   const setShowSidebar = useSetAtom(showSidebarState)
-  const user = useAtomValue(currentUserState)
   const pathname = usePathname()
+
+  const [user, setUser] = useAtom(currentUserState)
+
   const handleLogout = async () => {
     logoutUser()
     router.push('/login')
+    setUser(undefined)
   }
   const items = [
     {

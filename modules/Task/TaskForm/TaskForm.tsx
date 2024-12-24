@@ -11,8 +11,9 @@ import { UploadFileTask, WorkTodo } from '../components'
 import { FlexContainer, Typography } from '@/components'
 import { useListOfProjectManagement } from '@/hooks/useProjectManagement'
 import { useListOfUserManagement } from '@/hooks/useUserManagement'
-import { userRoleState } from '@/states/users'
+import { currentUserState, userRoleState } from '@/states/users'
 import { TaskFormRequest, TaskInterface, TaskStatus } from '@/types'
+import { isAdminRole } from '@/utils/commons'
 
 const statusOptions = [
   { label: 'Open/Todo', value: 'open' },
@@ -56,9 +57,10 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   const { listOfUserManagement } = useListOfUserManagement({
     isPagination: false,
   })
-
+  const userValue = useAtomValue(currentUserState)
   const { listOfProjectManagement } = useListOfProjectManagement({
     isPagination: false,
+    currentUserId: userValue && isAdminRole(userValue),
   })
 
   const userOption = listOfUserManagement.map((item) => ({

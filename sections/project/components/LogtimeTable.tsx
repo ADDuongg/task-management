@@ -23,23 +23,22 @@ import {
 } from 'antd'
 import { TableProps } from 'antd/lib'
 
-import { deleteLogtime } from '@/action'
 import { FlexContainer, Icon, Typography } from '@/components'
 import { dataActivity } from '@/constants'
 import { useHandleDataTable } from '@/hooks/useHandleDataTable'
 import { useDeleteLogtime, useListOfLogtime } from '@/hooks/useLogtime'
-import { useListOfProjectManagement } from '@/hooks/useProjectManagement'
 import { ModalLogtime } from '@/modules/Task/Logtime'
 import {
   ActionData,
   LogtimeInterface,
+  ProjectInterface,
   SortEnum,
   TaskInterface,
   UsersInterface,
 } from '@/types'
 
 const { Option } = Select
-export const LogtimeTable = () => {
+export const LogtimeTable = ({ task }: { task: TaskInterface }) => {
   const {
     sort,
     filter,
@@ -62,9 +61,14 @@ export const LogtimeTable = () => {
     filter,
     sort,
     search,
+    task,
   })
+  console.log('listOfLogtime', listOfLogtime)
+
   const { deleteLogtime, isPending } = useDeleteLogtime()
+
   const { totalPages, currentPage, pageSize } = pagination || {}
+
   const itemsActionTable = [
     {
       key: '1',
@@ -98,7 +102,9 @@ export const LogtimeTable = () => {
     </div>
   )
   const [openModalLogtime, setOpenModalLogtime] = useState(false)
+
   const [dataUpdate, setDataUpdate] = useState<LogtimeInterface>()
+
   const itemFilter = dataActivity?.map((item, index) => ({
     key: index,
     label: (
@@ -112,9 +118,7 @@ export const LogtimeTable = () => {
       </div>
     ),
   }))
-  const { listOfProjectManagement } = useListOfProjectManagement({
-    isPagination: false,
-  })
+
   const columns: TableProps<LogtimeInterface>['columns'] = [
     {
       title: 'ID',
@@ -237,24 +241,8 @@ export const LogtimeTable = () => {
     },
   ]
 
-  const projectOption = listOfProjectManagement?.map((item) => ({
-    label: item.projectName,
-    value: item._id,
-  }))
-  console.log('listOfProjectManagement[0]?._id', projectOption[0]?.value)
   return (
-    <div className="p-3">
-      <Typography text="List Log time" fontWeight={true} />
-      <Select
-        defaultValue={[
-          {
-            label: 'Choose project',
-            value: listOfProjectManagement[0]?._id,
-          },
-        ]}
-        style={{ width: 140, marginTop: 10 }}
-        options={projectOption}
-      />
+    <div>
       <div className="flex flex-row justify-between xl:items-center items-start gap-y-5 my-5">
         <FlexContainer className="!w-1/2" justifyContent="flex-end">
           <Input
@@ -280,7 +268,7 @@ export const LogtimeTable = () => {
         {renderActionTable()}
       </div>
       <Table
-        dataSource={listOfLogtime}
+        dataSource={(listOfLogtime as LogtimeInterface[]) || []}
         columns={columns}
         rowKey={(record: LogtimeInterface) => record._id}
         pagination={{

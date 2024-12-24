@@ -1,16 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Select } from 'antd'
 import { useAtomValue } from 'jotai'
 
-import { TableTask } from './components'
+import { LogtimeTable } from './LogtimeTable'
+import { Typography } from '@/components'
 import { useListOfProjectManagement } from '@/hooks/useProjectManagement'
+import { useListOfTaskManagement } from '@/hooks/useTaskManagement'
 import { currentUserState } from '@/states/users'
 import { isAdminRole } from '@/utils/commons'
 
-export const UserTaskManagement = () => {
+export const Logtime = () => {
   const [projectId, setProjectId] = useState<any>()
   const userValue = useAtomValue(currentUserState)
   const { listOfProjectManagement } = useListOfProjectManagement({
@@ -18,13 +20,26 @@ export const UserTaskManagement = () => {
     currentUserId: userValue && isAdminRole(userValue),
   })
 
+  const { listOfTaskManagement } = useListOfTaskManagement({
+    isPagination: false,
+  })
+
+  const task = useMemo(() => {
+    const taskByProject = listOfTaskManagement?.find(
+      (item) => item.projectId?._id === projectId,
+    )
+    return taskByProject
+  }, [projectId, listOfTaskManagement])
+
   const projectOption =
     listOfProjectManagement?.map((item) => ({
       label: item.projectName,
       value: item._id,
     })) || []
+
   return (
-    <div className="flex flex-col">
+    <div className="p-3 flex flex-col">
+      <Typography text="List Log time" fontWeight={true} />
       <Select
         defaultValue={[
           {
@@ -39,16 +54,16 @@ export const UserTaskManagement = () => {
         }}
       />
       {projectId ? (
-        projectId ? (
-          <TableTask projectId={projectId} />
+        task ? (
+          <LogtimeTable task={task} />
         ) : (
-          <span className="text-center dark:text-white">
-            No task found for this project
+          <span className="text-center">
+            No log time found for this project
           </span>
         )
       ) : (
-        <span className="text-center dark:text-white">
-          Please select a project to view task
+        <span className="text-center">
+          Please select a project to view log time
         </span>
       )}
     </div>

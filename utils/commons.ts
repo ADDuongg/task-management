@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { RoleEnum, UsersInterface } from "@/types";
 import { message } from "antd";
 import moment from "moment";
 
@@ -42,5 +43,8 @@ export function convertMongoToPlainObject<T>(mongoObject: T): Omit<T, '_id' | '_
   return plainEntry
 }
 
+export const isAdminRole = (user: UsersInterface) => {
+    return user?.account_role === RoleEnum.ADMIN ? undefined : user._id
+}
 
 

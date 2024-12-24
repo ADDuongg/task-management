@@ -19,6 +19,7 @@ import {
   Select,
   Tooltip,
 } from 'antd'
+import { useAtomValue } from 'jotai'
 
 import { deleteProject } from '@/action/project'
 import { FlexContainer, Icon, RenderListData } from '@/components'
@@ -30,12 +31,15 @@ import {
   ModalViewProject,
 } from '@/modules/Project'
 import { ModalViewLogtime } from '@/modules/Project/ViewLogtime'
+import { currentUserState } from '@/states/users'
 import {
   ActionData,
   ProjectInterface,
   ProjectStatus,
+  RoleEnum,
   filterInterface,
 } from '@/types'
+import { isAdminRole } from '@/utils/commons'
 
 const { Option } = Select
 export const ProjectGrid = () => {
@@ -43,7 +47,7 @@ export const ProjectGrid = () => {
   const [filter, setFilter] = useState<filterInterface<ProjectInterface>[]>([])
   const [limit, setLimit] = useState<number>(10)
   const [search, setSearch] = useState<string>('')
-
+  const userValue = useAtomValue(currentUserState)
   const [modalState, setModalState] = useState<{
     create: boolean
     view: boolean
@@ -64,6 +68,7 @@ export const ProjectGrid = () => {
     limit,
     filter,
     search: debouncedSearchTerm,
+    currentUserId: userValue && isAdminRole(userValue),
   })
   const { totalPages, currentPage, pageSize } = pagination || {}
 
@@ -213,7 +218,7 @@ export const ProjectGrid = () => {
       </div>
       <div className="grid xxl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 auto-rows-auto gap-4 space-y-0">
         <RenderListData
-          data={listOfProjectManagement}
+          data={listOfProjectManagement || []}
           renderComponent={(item) => (
             <div className="p-4 border-2 border-solid rounded-md flex justify-between">
               <div>

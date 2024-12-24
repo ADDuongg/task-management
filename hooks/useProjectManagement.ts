@@ -28,6 +28,7 @@ export const useListOfProjectManagement = ({
   sort,
   search,
   isPagination = true,
+  currentUserId
 }: {
   page?: number
   limit?: number
@@ -35,6 +36,7 @@ export const useListOfProjectManagement = ({
   sort?: sortInterface<ProjectInterface>[]
   search?: string
   isPagination?: boolean
+  currentUserId?: string
 }) => {
   const { data, error, isLoading } = useQuery<ProjectsResponse>({
     queryKey: ['projects', 'all', page, limit, filter, sort, search],
@@ -51,8 +53,10 @@ export const useListOfProjectManagement = ({
       return await projectServices.getListProjects({})
     },
   })
+  console.log('currentUserId', currentUserId)
+    
   return {
-    listOfProjectManagement: data?.projects || [],
+    listOfProjectManagement: currentUserId ? data?.projects?.filter((project) => project.userId.some((user) => user._id === currentUserId)): data?.projects || [],
     pagination: data?.pagination,
     error,
     isLoading,

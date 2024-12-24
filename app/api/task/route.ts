@@ -64,6 +64,7 @@ export const POST = async (request: NextRequest) => {
       // .populate('userId')
       .populate('assignTo')
       .populate('taskOwner')
+      .populate('projectId')
       .sort(sortQuery)
       .skip((page - 1) * limit)
       .limit(limit)

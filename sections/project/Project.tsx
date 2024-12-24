@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Tabs } from 'antd'
 
-import { LogtimeTable, ProjectGrid } from './components'
+import { Logtime, ProjectGrid } from './components'
 
 const items = [
   {
@@ -13,7 +13,7 @@ const items = [
   {
     key: '2',
     label: 'Logtime',
-    children: <LogtimeTable />,
+    children: <Logtime />,
   },
 ]
 const Project = () => {

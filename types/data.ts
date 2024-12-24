@@ -14,7 +14,7 @@ export interface TaskInterface {
     workToDo?: string[];
     taskOwner?: UsersInterface | string;
     estimateTime?: string
-    projectId?: ProjectInterface | string;
+    projectId?: ProjectInterface;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -134,7 +134,7 @@ export interface MessageFormRequest {
 export interface LogtimeInterface {
   _id: string;
   activity: string;
-  userId: UsersInterface | string;
+  userId: UsersInterface;
   taskId: TaskInterface ;
   comment: string;
   dateLogtime: string;

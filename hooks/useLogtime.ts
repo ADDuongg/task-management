@@ -11,6 +11,7 @@ import {
   LogtimeInterface,
   LogtimeResponse,
   ProjectFormRequest,
+  ProjectInterface,
   TaskInterface,
   UsersInterface,
   filterInterface,
@@ -168,7 +169,9 @@ export const useListOfLogtime = ({
   filter,
   sort,
   search,
-  isPagination = true
+  isPagination = true,
+  task,
+  currentUserId
 }: {
   page?: number
   limit?: number
@@ -176,6 +179,8 @@ export const useListOfLogtime = ({
   sort?: sortInterface<LogtimeInterface>[]
   search?: string
   isPagination?: boolean
+  task?: TaskInterface
+  currentUserId?: string
 }) => {
   const { data, error, isLoading } = useQuery<LogtimeResponse>({
     queryKey: ['logtimes', 'all', page, limit, filter, sort, search],
@@ -187,8 +192,10 @@ export const useListOfLogtime = ({
       return await logtimeServices.getListLogtime({});
     }
   })
+  const listOfAllLogtime = data?.logtime.filter(logtime => logtime.taskId._id === task?._id)
+  const listOfLogtimeByUser = data?.logtime.filter(logtime => logtime.userId._id === currentUserId)
   return {
-    listOfLogtime: data?.logtime || [],
+    listOfLogtime: task ? listOfAllLogtime : (currentUserId ? listOfLogtimeByUser : data?.logtime || []),
     pagination: data?.pagination,
     error,
     isLoading,
